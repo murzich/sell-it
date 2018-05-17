@@ -1,0 +1,30 @@
+:root {
+  --color_theme: #00b3be;
+  --color_primary: #4a4a4a;
+  --color_accent: #91d763;
+  --color_background: #ffffff;
+  --color_button-bg: #f2f2f2;
+  --font: Arial;
+  --width-aside-right: 383px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font: 18px/1 Arial, sans-serif;
+  color: var(--color_primary);
+}
+
+a {
+  text-decoration: none;
+}
+
+@font-face {
+  font-family: "MyriadProRegular";
+  src: url("assets/fonts/MyriadProRegular/MyriadProRegular.eot");
+  src: url("assets/fonts/MyriadProRegular/MyriadProRegular.eot?#iefix")format("embedded-opentype"),
+  url("assets/fonts/MyriadProRegular/MyriadProRegular.woff") format("woff"),
+  url("assets/fonts/MyriadProRegular/MyriadProRegular.otf") format("otf");
+  font-style: normal;
+  font-weight: normal;
+}

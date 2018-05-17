@@ -1,0 +1,42 @@
+.header {
+  height: 59px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: var(--color_background);
+}
+.logo {
+  flex: 0 0 auto;
+  display: block;
+  margin: 9px 0 10px 50px;
+}
+.search {
+  flex: 1 1 auto;
+  margin: 0 15px;
+  font-size: 14px;
+  max-width: 450px;
+  &__form {
+    max-width: 450px;
+    border-bottom: 1px solid;
+    border-color: var(--color_theme);
+  }
+  &__input {
+    border: 0;
+    background: var(--color_background);
+    width: calc(100% - 20px);
+  }
+}
+.user-block {
+  color: var(--color_background);
+  font-size: 16px;
+  flex: 0 0 auto;
+  width: var(--width-aside-right);
+  background: var(--color_theme);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 25px 10px;
+}
