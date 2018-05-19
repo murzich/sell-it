@@ -1,8 +1,15 @@
 :host {
+  display: block;
+  position: relative;
+}
+main {
   display: grid;
-  grid-template-columns: repeat(4, 323px);
+  grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
   grid-auto-rows: 252px;
   grid-column-gap: 17px;
   grid-row-gap: 21px;
   margin: 48px;
+  @media screen and (max-width: 800px) {
+    margin: 10px;
+  }
 }
