@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {ProductPageComponent} from './productPage.component';
 import {ProductItemComponent} from './productItem/productItem.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import {ProductItemComponent} from './productItem/productItem.component';
     ProductItemComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    SharedModule
   ],
   exports: [
     ProductPageComponent
