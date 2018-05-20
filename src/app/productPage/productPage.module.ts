@@ -1,8 +1,8 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 
-import {ProductPageComponent} from './productPage.component';
-import {ProductItemComponent} from './productItem/productItem.component';
+import { ProductPageComponent } from './productPage.component';
+import { ProductItemComponent } from './productItem/productItem.component';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
@@ -19,5 +19,4 @@ import { SharedModule } from '../shared/shared.module';
   ],
   providers: []
 })
-
 export class ProductPageModule { }

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 
 import { LoginPageComponent } from './loginPage.component';
 import { SharedModule } from '../shared/shared.module';
