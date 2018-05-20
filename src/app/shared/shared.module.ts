@@ -3,18 +3,24 @@ import { NgModule } from '@angular/core';
 
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { ScrollToTopDirective } from './directives/scrollToTop/scrollToTop.directive';
+import { ButtonToTopComponent } from './components/buttonToTop/buttonToTop.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    ButtonToTopComponent,
+    ScrollToTopDirective,
   ],
   imports: [
     BrowserModule
   ],
   exports: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    ButtonToTopComponent,
+    ScrollToTopDirective
   ],
   providers: []
 })

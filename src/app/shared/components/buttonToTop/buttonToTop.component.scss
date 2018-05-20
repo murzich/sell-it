@@ -1,0 +1,19 @@
+button {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  border: thin solid red;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  background-color: coral;
+  color: #eee6e3;
+  font: normal 700 1rem/1 Arial, sans-serif;
+  transition: background-color 400ms ease;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    background-color: red;
+  }
+}
