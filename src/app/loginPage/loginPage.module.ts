@@ -2,13 +2,15 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { LoginPageComponent } from './loginPage.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
     LoginPageComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    SharedModule
   ],
   exports: [
     LoginPageComponent
