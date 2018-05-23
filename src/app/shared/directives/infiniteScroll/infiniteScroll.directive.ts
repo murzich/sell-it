@@ -1,15 +1,14 @@
-import { Directive, HostListener } from '@angular/core';
+import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 @Directive({
   selector: '[appInfiniteScroll]'
 })
 export class InfiniteScrollDirective {
-  private crossbarDelta: number;
   private crossbar: number;
+  @Input() crossbarDelta: number = 150;
+  @Output() reachedBottom = new EventEmitter<any>();
   constructor() {
-    console.log('infiniteScroll Class created.');
-    this.crossbarDelta = 150;
-    this.crossbar = document.body.offsetHeight - window.innerHeight - this.crossbarDelta;
+    this.onResize();
   }
   @HostListener('window:resize')
   public onResize() {
@@ -17,8 +16,9 @@ export class InfiniteScrollDirective {
   }
   @HostListener('window:scroll')
   public onScroll() {
+    this.onResize();
     if (window.scrollY > this.crossbar) {
-      console.log(window.scrollY);
+      this.reachedBottom.emit();
     }
   }
 }

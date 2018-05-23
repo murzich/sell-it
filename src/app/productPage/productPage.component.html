@@ -1,5 +1,5 @@
 <app-header></app-header>
-<main appInfiniteScroll (click)="getMoreItems()">
+<main appInfiniteScroll (reachedBottom)="getMoreItems()"  [crossbarDelta]="150">
     <app-product-item *ngFor="let i of products"
                       [id]="i.id"
                       [name]="i.name"

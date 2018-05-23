@@ -21,6 +21,6 @@ export class ProductPageComponent implements OnInit {
     this.products = productList;
   }
   public getMoreItems() {
-    this.productService.getMore10();
+    this.productService.getMore12();
   }
 }
