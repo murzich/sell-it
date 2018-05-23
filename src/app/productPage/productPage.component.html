@@ -1,5 +1,5 @@
 <app-header></app-header>
-<main>
+<main appInfiniteScroll>
     <app-product-item *ngFor="let i of products"
                       [id]="i.id"
                       [name]="i.name"
