@@ -4,12 +4,16 @@ import { NgModule } from '@angular/core';
 import { InfiniteScrollDirective } from './directives/infiniteScroll/infiniteScroll.directive';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { ScrollToTopDirective } from './directives/scrollToTop/scrollToTop.directive';
+import { ButtonToTopComponent } from './components/buttonToTop/buttonToTop.component';
 
 @NgModule({
   declarations: [
     InfiniteScrollDirective,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    ButtonToTopComponent,
+    ScrollToTopDirective,
   ],
   imports: [
     BrowserModule
@@ -17,7 +21,9 @@ import { FooterComponent } from './components/footer/footer.component';
   exports: [
     InfiniteScrollDirective,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    ButtonToTopComponent,
+    ScrollToTopDirective
   ],
   providers: []
 })
