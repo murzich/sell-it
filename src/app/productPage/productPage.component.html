@@ -1,9 +1,8 @@
 <app-header></app-header>
-<main appInfiniteScroll (reachedBottom)="getMoreItems()"  [crossbarDelta]="150">
-    <app-product-item *ngFor="let i of products"
-                      [id]="i.id"
-                      [name]="i.name"
-                      [image]="i.image"
+<main appInfiniteScroll (reachedBottom)="getMoreAdverts()"  [crossbarDelta]="150">
+    <app-product-item *ngFor="let i of adverts"
+                      [name]="i.theme"
+                      [image]="i.images[0]"
     ></app-product-item>
 </main>
 <app-footer></app-footer>

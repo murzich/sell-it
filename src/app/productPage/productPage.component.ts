@@ -1,26 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 
-import { IProduct } from './product.interface';
-import { ProductService } from './product.service';
+import { AdvertService } from '../advert.service';
+import { Advert } from '../advert.model';
 
 @Component({
   selector: 'app-product-page',
   templateUrl: './productPage.component.html',
   styleUrls: ['./productPage.component.scss'],
-  providers: [ProductService]
+  providers: []
 })
 export class ProductPageComponent implements OnInit {
-  public products: IProduct[];
-  constructor(private productService: ProductService) { }
+  public adverts: Advert[];
+  constructor(private advertService: AdvertService) { }
 
   ngOnInit() {
-    this.getProductList(this.productService.getList());
+    this.advertService.getAdverts().subscribe( (res: Advert[]) => {
+      this.adverts = res;
+    });
   }
 
-  private getProductList(productList: IProduct[]): void {
-    this.products = productList;
-  }
-  public getMoreItems() {
-    this.productService.getMore12();
+  public getMoreAdverts() {
+    this.advertService.getMore12(this.adverts);
   }
 }

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { ProductPageComponent } from './productPage.component';
 import { ProductItemComponent } from './productItem/productItem.component';
 import { SharedModule } from '../shared/shared.module';
+import { AdvertService } from '../advert.service';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,6 @@ import { SharedModule } from '../shared/shared.module';
   exports: [
     ProductPageComponent
   ],
-  providers: []
+  providers: [AdvertService]
 })
 export class ProductPageModule { }
