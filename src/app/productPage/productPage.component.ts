@@ -11,15 +11,33 @@ import { Advert } from '../advert.model';
 })
 export class ProductPageComponent implements OnInit {
   public adverts: Advert[];
-  constructor(private advertService: AdvertService) { }
+  public page: number;
+  public isReadyToScroll: boolean;
+  constructor(private advertService: AdvertService) {
+    this.isReadyToScroll = true;
+  }
 
   ngOnInit() {
-    this.advertService.getAdverts().subscribe( (res: Advert[]) => {
-      this.adverts = res;
-    });
+    this.advertService.getAdverts()
+      .subscribe(
+        (res: Advert[]) => { this.adverts = res; },
+        err => console.error(err),
+        () => {
+          this.page = 1;
+        }
+      );
   }
 
   public getMoreAdverts() {
-    this.advertService.getMore12(this.adverts);
+    this.isReadyToScroll = false;
+    this.advertService.getNext(this.page)
+      .subscribe(
+        (res: Advert[]) => { this.adverts = this.adverts.concat(res); },
+        err => console.error(err),
+        () => {
+          this.page++;
+          this.isReadyToScroll = (this.advertService.nextPage !== null);
+        }
+      );
   }
 }

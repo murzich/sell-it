@@ -1,8 +1,8 @@
 export class Advert {
+  public id: number;
   public theme: string;
   public images: string[];
   // TODO: Add Image object type; Or for this time use string[];
-  // public pk: number;
   // TODO: Add Owner object type;
   // public owner: any;
   // public text: string;
@@ -16,9 +16,8 @@ export class Advert {
   // public isActive: boolean;
 
   constructor(json: any) {
-    this.theme = json.name;
-    this.images = [json.image];
-    // TODO: uncomment for hhtp: request;
-    // this.images = json.images.map((image: object) => image.file);
+    this.theme = json.theme;
+    this.images = json.images.map((image: any) => image.file);
+    this.id = json.pk;
   }
 }

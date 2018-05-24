@@ -6,6 +6,7 @@ import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/c
 export class InfiniteScrollDirective {
   private crossbar: number;
   @Input() crossbarDelta: number = 150;
+  @Input() goScroll: boolean;
   @Output() reachedBottom = new EventEmitter<any>();
   constructor() {
     this.onResize();
@@ -17,7 +18,7 @@ export class InfiniteScrollDirective {
   @HostListener('window:scroll')
   public onScroll() {
     this.onResize();
-    if (window.scrollY > this.crossbar) {
+    if (window.scrollY > this.crossbar && this.goScroll) {
       this.reachedBottom.emit();
     }
   }
