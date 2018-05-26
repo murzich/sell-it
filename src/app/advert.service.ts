@@ -13,7 +13,7 @@ export class AdvertService {
   constructor(private http: HttpClient) {
     this.urlAPI = 'http://light-it-04.tk/api/adverts/';
     this.params = {
-      'limit': '1',
+      'limit': '12',
       'offset': '0'
     };
   }
