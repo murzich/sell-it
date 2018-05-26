@@ -1,6 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+import { ProductPageRoutingModule } from './productPage-routing.module';
 import { ProductPageComponent } from './productPage.component';
 import { ProductItemComponent } from './productItem/productItem.component';
 import { SharedModule } from '../shared/shared.module';
@@ -12,7 +13,8 @@ import { AdvertService } from '../advert.service';
     ProductItemComponent
   ],
   imports: [
-    BrowserModule,
+    CommonModule,
+    ProductPageRoutingModule,
     SharedModule
   ],
   exports: [

@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { InfiniteScrollDirective } from './directives/infiniteScroll/infiniteScroll.directive';
@@ -16,7 +16,7 @@ import { ButtonToTopComponent } from './components/buttonToTop/buttonToTop.compo
     ScrollToTopDirective,
   ],
   imports: [
-    BrowserModule
+    CommonModule
   ],
   exports: [
     InfiniteScrollDirective,

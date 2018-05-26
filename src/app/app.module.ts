@@ -3,22 +3,18 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { DetailPageModule } from './detailPage/detailPage.module';
-import { LoginPageModule } from './loginPage/loginPage.module';
-import { ProductPageModule } from './productPage/productPage.module';
-import { SharedModule } from './shared/shared.module';
+import { AppRoutingModule } from './app-routing.module';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    DetailPageModule,
-    LoginPageModule,
-    ProductPageModule,
-    SharedModule
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
