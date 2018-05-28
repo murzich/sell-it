@@ -2,14 +2,14 @@
 <main class="main-content">
   <!--<section class="detail-page">-->
   <div class="slider">
-    <img src="assets/img/product_sliced.jpg" alt="The greatest product ever!" class="slider__img">
+    <img src="{{advert.images[0]?.file}}" alt="The greatest product ever!" class="slider__img">
   </div>
   <div class="about">
-    <h1 class="about__title">Some title text must be here <br> maybe second line</h1>
-    <div class="about__vendor">from <a href="#0" class="vendor">Alis Kim</a></div>
-    <div class="about__price">18000 $</div>
+    <h1 class="about__title">{{advert.theme}}</h1>
+    <div class="about__vendor">from <a href="#0" class="vendor">{{advert.owner.first_name}} {{advert.owner.last_name}}</a></div>
+    <div class="about__price">{{advert.price}} $</div>
     <div class="about__description">
-      <p>Some description text from WYSIWYG editor</p>
+      <p>{{advert.text}}</p>
       <p>Can be <span class="about__bold">BOLD</span> <span class="about__italic">Italic</span></p>
       <div class="about__list about__bold">Can have  list:
         <ul class="about__ul">
@@ -27,13 +27,13 @@
   <section class="chat">
     <h2 class="chat__title">Chat
       <span class="chat__subtitle">with
-                    <a href="#0" class="chat__vendor chat__vendor--online">Alis Kim</a>
+                    <a href="#0" class="chat__vendor chat__vendor--online">{{advert.owner.first_name}} {{advert.owner.last_name}}</a>
                 </span>
     </h2>
     <div class="chat__area">
       <form class="chat__messages" method="post" >
         <div class="chat__message chat__message--single-line chat__message--vendor">
-          <img src="assets/img/vendor.jpg" alt="vendor" class="chat__icon">
+          <img src="{{advert.owner.avatar}}" alt="vendor" class="chat__icon">
           <div class="chat__text">One line chat message</div>
         </div>
         <div class="chat__message chat__message--multi-line chat__message--user">
@@ -54,8 +54,8 @@
   <div class="chat__connected">
     <h3 class="chat__title--connected">Connected</h3>
     <div class="user">
-      <img src="assets/img/vendor.jpg" alt="vendor" class="user__img">
-      <span class="user__name">Alis Kim</span>
+      <img src="{{advert.owner.avatar}}" alt="vendor" class="user__img">
+      <span class="user__name">{{advert.owner.first_name}} {{advert.owner.last_name}}</span>
     </div>
     <div class="user">
       <img src="assets/img/user.jpg" alt="user" class="user__img">

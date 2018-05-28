@@ -6,7 +6,7 @@ const routes: Routes = [
   {path: 'login', loadChildren: './loginPage/loginPage.module#LoginPageModule'},
   {path: 'product', loadChildren: './productPage/productPage.module#ProductPageModule'},
   {path: 'detail', loadChildren: './detailPage/detailPage.module#DetailPageModule'},
-  {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: '', redirectTo: 'product', pathMatch: 'full'},
   {path: '**', component: NotFoundComponent}
 ];
 

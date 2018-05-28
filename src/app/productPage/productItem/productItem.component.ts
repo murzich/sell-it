@@ -12,6 +12,6 @@ export class ProductItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.image = !this.image ? '/assets/img/no_image_available.jpg' : this.image;
+    this.image = !this.image ? 'assets/img/no_image_available.jpg' : this.image;
   }
 }

@@ -6,6 +6,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ScrollToTopDirective } from './directives/scrollToTop/scrollToTop.directive';
 import { ButtonToTopComponent } from './components/buttonToTop/buttonToTop.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { ButtonToTopComponent } from './components/buttonToTop/buttonToTop.compo
     ScrollToTopDirective,
   ],
   imports: [
+    RouterModule,
     CommonModule
   ],
   exports: [

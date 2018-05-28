@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { Advert } from './advert.model';
+import { Advert, AdvertFull } from './advert.model';
 import { OperatorFunction } from 'rxjs';
 
 @Injectable()
@@ -34,5 +34,11 @@ export class AdvertService {
       response.results.forEach(item => results.push(new Advert(item)));
       return results;
     });
+  }
+  public readAdvert(id) {
+    return this.http.get(`${this.urlAPI}${id}`)
+      .pipe(
+        map( (response: any) => new AdvertFull(response) )
+      );
   }
 }

@@ -5,7 +5,7 @@ import { ProductPageRoutingModule } from './productPage-routing.module';
 import { ProductPageComponent } from './productPage.component';
 import { ProductItemComponent } from './productItem/productItem.component';
 import { SharedModule } from '../shared/shared.module';
-import { AdvertService } from '../advert.service';
+import { AdvertService } from '../core/advert.service';
 
 @NgModule({
   declarations: [

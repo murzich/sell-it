@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AdvertService } from '../advert.service';
-import { Advert } from '../advert.model';
+import { AdvertService } from '../core/advert.service';
+import { Advert } from '../core/advert.model';
 
 @Component({
   selector: 'app-product-page',

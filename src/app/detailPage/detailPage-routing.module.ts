@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DetailPageComponent } from './detailPage.component';
 
 const routes: Routes = [
-  {path: '', component: DetailPageComponent}
+  {path: ':id', component: DetailPageComponent}
 ];
 
 @NgModule({
