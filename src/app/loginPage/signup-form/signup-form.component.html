@@ -1,0 +1,26 @@
+<form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="login-page__field">
+  <input type="email" class="login__input" placeholder="Email"
+    formControlName="email">
+
+  <!--TODO: move logic of massaging to component class-->
+  <div class="input-error"
+       *ngIf="signUpForm.get('email').errors && (signUpForm.get('email').touched || signUpForm.get('email').dirty)"
+  >Wrong email address</div>
+  <div>{{signUpForm.get('email').errors | json}}</div>
+  <div *ngIf="signUpForm.get('email').errors.required && signUpForm.get('email')">Can't be empty</div>
+
+  <input type="password" class="login__input" placeholder="Password"
+    formControlName="password">
+  <input type="password" class="login__input" placeholder="Confirm Password"
+    formControlName="passwordConfirm">
+  <button type="submit" class="login__submit login-page__button"
+    [disabled]="signUpForm.status === 'INVALID'"
+  >Sign up</button>
+
+</form>
+<div>{{signUpForm.value | json}}</div>
+<div>Errors: {{signUpForm.errors | json}}</div>
+<div>pristine: {{signUpForm.pristine | json}}</div>
+<div>dirty: {{signUpForm.dirty | json}}</div>
+<div>touched: {{signUpForm.touched | json}}</div>
+<div>untouched: {{signUpForm.untouched | json}}</div>
