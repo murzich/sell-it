@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Advert, AdvertFull } from './advert.model';
-import { OperatorFunction } from 'rxjs';
+import { Observable, OperatorFunction } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AdvertService {
   private urlAPI: string;
   private params: any;
@@ -35,7 +37,7 @@ export class AdvertService {
       return results;
     });
   }
-  public readAdvert(id) {
+  public readAdvert(id: number): Observable<AdvertFull> {
     return this.http.get(`${this.urlAPI}${id}`)
       .pipe(
         map( (response: any) => new AdvertFull(response) )
