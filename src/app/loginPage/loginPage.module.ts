@@ -5,14 +5,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LoginPageRoutingModule } from './loginPage-routing.module';
 import { LoginPageComponent } from './loginPage.component';
 import { SharedModule } from '../shared/shared.module';
-import { SigninFormComponent } from './signin-form/signin-form.component';
-import { SignupFormComponent } from './signup-form/signup-form.component';
+import { SignInFormComponent } from './sign-in-form/sign-in-form.component';
+import { SignUpFormComponent } from './sign-up-form/sign-up-form.component';
 
 @NgModule({
   declarations: [
     LoginPageComponent,
-    SigninFormComponent,
-    SignupFormComponent
+    SignInFormComponent,
+    SignUpFormComponent
   ],
   imports: [
     CommonModule,

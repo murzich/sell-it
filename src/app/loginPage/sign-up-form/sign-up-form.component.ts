@@ -5,11 +5,11 @@ import { LoginModel } from '../login.model';
 import { PasswordConfirmValidator } from './password-confirm-validator';
 
 @Component({
-  selector: 'app-signup-form',
-  templateUrl: './signup-form.component.html',
-  styleUrls: ['./signup-form.component.scss']
+  selector: 'app-sign-up-form',
+  templateUrl: './sign-up-form.component.html',
+  styleUrls: ['./sign-up-form.component.scss']
 })
-export class SignupFormComponent implements OnInit {
+export class SignUpFormComponent implements OnInit {
   model = new LoginModel();
   signUpForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),

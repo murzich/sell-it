@@ -9,8 +9,8 @@
         <button (click)="hasAccount = false" type="button" class="tabs__tab login-page__button" data-fieldset="sign-up">Sign up</button>
       </div>
       <div>
-        <app-signin-form *ngIf="hasAccount"></app-signin-form>
-        <app-signup-form #hasAccount *ngIf="!hasAccount"></app-signup-form>
+        <app-sign-in-form *ngIf="hasAccount"></app-sign-in-form>
+        <app-sign-up-form #hasAccount *ngIf="!hasAccount"></app-sign-up-form>
       </div>
     </div>
     <!--TODO: add to FooterComponent possibility to change innerHTML-->
