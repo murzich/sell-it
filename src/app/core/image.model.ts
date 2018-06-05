@@ -1,9 +1,3 @@
-export interface ImageModel {
-  pk: number;
-  advert: number;
-  file: string;
-}
-
 export class AdvertImage {
   pk: number;
   advert: number;
