@@ -12,18 +12,37 @@ import { PasswordConfirmValidator } from './password-confirm-validator';
 export class SignUpFormComponent implements OnInit {
   model = new LoginModel();
   signUpForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    passwordConfirm: new FormControl('', [Validators.required, Validators.minLength(8)])
-  }, [
-    PasswordConfirmValidator.MatchPassword
-  ]);
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email
+    ]),
+    // TODO: create new FormGroup for passwords
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8)
+    ]),
+    passwordConfirm: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8)
+    ])
 // TODO: make validator, that takes options in array of formControl symbols;
+  });
+
   constructor() { }
+
+  get email(): FormControl { return this.signUpForm.get('email') as FormControl; }
+  get password(): FormControl { return this.signUpForm.get('password') as FormControl; }
+  get passwordConfirm(): FormControl { return this.signUpForm.get('passwordConfirm') as FormControl; }
 
   ngOnInit() {
   }
+
+  /**
+   * TODO: Mock submission method
+   * Form submission.
+   **/
   onSubmit() {
-    console.log(this.signUpForm);
+    console.log('value', this.signUpForm.value);
+    this.signUpForm.reset();
   }
 }

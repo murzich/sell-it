@@ -1,26 +1,58 @@
 <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="login-page__field">
-  <input type="email" class="login__input" placeholder="Email"
-    formControlName="email">
 
-  <!--TODO: move logic of massaging to component class-->
-  <div class="input-error"
-       *ngIf="signUpForm.get('email').errors && (signUpForm.get('email').touched || signUpForm.get('email').dirty)"
-  >Wrong email address</div>
-  <div>{{signUpForm.get('email').errors | json}}</div>
-  <div *ngIf="signUpForm.get('email').errors.required && signUpForm.get('email')">Can't be empty</div>
+  <input type="email"
+         class="login__input"
+         placeholder="Email"
+         autocomplete="false"
+         formControlName="email"
+  >
+  <div class="input-error" *ngIf="email.invalid && (email.dirty || email.touched)">
+    <div *ngIf="email.errors.required">
+      Email is required.
+    </div>
+    <div *ngIf="email.errors.email">
+      Email is unacceptable.
+    </div>
+    <!--<div *ngIf="email.errors.forbiddenName">-->
+      <!--Name cannot be Bob.-->
+    <!--</div>-->
+  </div>
 
-  <input type="password" class="login__input" placeholder="Password"
-    formControlName="password">
-  <input type="password" class="login__input" placeholder="Confirm Password"
-    formControlName="passwordConfirm">
+  <input class="login__input"
+         type="password"
+         placeholder="Password"
+         formControlName="password"
+  >
+  <div class="input-error" *ngIf="password.invalid && (password.dirty || password.touched)">
+    <div *ngIf="password.errors.required">
+      Passsword is required.
+    </div>
+    <div *ngIf="!!password.errors.minLength">
+      Password is too short.
+    </div>
+    <!--<div *ngIf="password.errors.forbiddenName">-->
+    <!--Name cannot be Bob.-->
+    <!--</div>-->
+  </div>
+
+  <input class="login__input"
+         type="password"
+         placeholder="Confirm Password"
+         formControlName="passwordConfirm"
+  >
+  <div class="input-error" *ngIf="passwordConfirm.invalid && (passwordConfirm.dirty || passwordConfirm.touched)">
+    <div *ngIf="passwordConfirm.errors.required">
+      Passsword is required.
+    </div>
+    <div *ngIf="!!passwordConfirm.errors.minLength">
+      Password is too short.
+    </div>
+    <!--<div *ngIf="passwordConfirm.errors.forbiddenName">-->
+    <!--Name cannot be Bob.-->
+    <!--</div>-->
+  </div>
   <button type="submit" class="login__submit login-page__button"
     [disabled]="signUpForm.status === 'INVALID'"
   >Sign up</button>
 
 </form>
-<div>{{signUpForm.value | json}}</div>
-<div>Errors: {{signUpForm.errors | json}}</div>
-<div>pristine: {{signUpForm.pristine | json}}</div>
-<div>dirty: {{signUpForm.dirty | json}}</div>
-<div>touched: {{signUpForm.touched | json}}</div>
-<div>untouched: {{signUpForm.untouched | json}}</div>
