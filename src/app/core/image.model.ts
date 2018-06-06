@@ -6,6 +6,7 @@ export class AdvertImage {
     if (!json) {
       this.advert = 0;
       this.pk = 0;
+      // TODO: assign mock image in view component scope
       this.file = 'assets/img/no_image_available.jpg';
     } else {
       this.advert = json.advert;

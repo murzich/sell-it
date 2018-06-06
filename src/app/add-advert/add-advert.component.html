@@ -1,0 +1,45 @@
+<app-header></app-header>
+
+<form [formGroup]="advertForm" (submit)="onSubmit()">
+
+  <label>
+    Theme:
+    <input type="text" formControlName="theme">
+  </label>
+  <div *ngIf="theme.touched || theme.dirty">
+    <span *ngIf="theme.invalid">
+      Required field.
+    </span>
+  </div>
+
+  <label>
+    Description:
+    <textarea type="text" formControlName="text"></textarea>
+  </label>
+  <label>
+    Price:
+    <input type="number" formControlName="price">
+  </label>
+  <label>
+    Currency:
+    <input type="number" formControlName="currency">
+  </label>
+  <label>
+    Contract price:
+    <input type="checkbox" formControlName="contract_price">
+  </label>
+  <div formGroupName="location">
+    <label>
+      Location:
+      <input type="text" formControlName="name">
+    </label>
+  </div>
+  <label>
+    Active
+    <input type="checkbox" formControlName="is_active">
+  </label>
+
+  <button type="submit">Submit</button>
+
+</form>
+<app-footer></app-footer>
