@@ -7,50 +7,43 @@
          formControlName="email"
   >
   <div class="input-error" *ngIf="email.invalid && (email.dirty || email.touched)">
-    <div *ngIf="email.errors.required">
+    <div *ngIf="email.errors['required']">
       Email is required.
     </div>
-    <div *ngIf="email.errors.email">
+    <div *ngIf="email.errors['emailInvalid'] && email.value.length > 0 && email.touched">
       Email is unacceptable.
     </div>
-    <!--<div *ngIf="email.errors.forbiddenName">-->
-      <!--Name cannot be Bob.-->
-    <!--</div>-->
   </div>
 
-  <input class="login__input"
-         type="password"
-         placeholder="Password"
-         formControlName="password"
-  >
-  <div class="input-error" *ngIf="password.invalid && (password.dirty || password.touched)">
-    <div *ngIf="password.errors.required">
-      Passsword is required.
-    </div>
-    <div *ngIf="!!password.errors.minLength">
-      Password is too short.
-    </div>
-    <!--<div *ngIf="password.errors.forbiddenName">-->
-    <!--Name cannot be Bob.-->
-    <!--</div>-->
-  </div>
+  <fieldset formGroupName="passwordGroup">
 
-  <input class="login__input"
-         type="password"
-         placeholder="Confirm Password"
-         formControlName="passwordConfirm"
-  >
-  <div class="input-error" *ngIf="passwordConfirm.invalid && (passwordConfirm.dirty || passwordConfirm.touched)">
-    <div *ngIf="passwordConfirm.errors.required">
-      Passsword is required.
+    <input class="login__input"
+           type="password"
+           placeholder="Password"
+           formControlName="password"
+    >
+    <div class="input-error" *ngIf="password.invalid && (password.dirty || password.touched)">
+      <div *ngIf="password.errors['required']">
+        Password is required.
+      </div>
+      <div *ngIf="!!password.errors['minlength'] && password.touched">
+        Password is too short.
+      </div>
     </div>
-    <div *ngIf="!!passwordConfirm.errors.minLength">
-      Password is too short.
+
+    <input class="login__input"
+           type="password"
+           placeholder="Confirm Password"
+           formControlName="passwordConfirm"
+    >
+    <!--TODO: Try to simplify;-->
+    <div class="input-error" *ngIf="passwordConfirm.dirty || passwordConfirm.touched">
+      <div *ngIf="password.touched && passwordGroup.errors && password.valid && passwordConfirm.touched">
+        Passwords are different
+      </div>
     </div>
-    <!--<div *ngIf="passwordConfirm.errors.forbiddenName">-->
-    <!--Name cannot be Bob.-->
-    <!--</div>-->
-  </div>
+  </fieldset>
+
   <button type="submit" class="login__submit login-page__button"
     [disabled]="signUpForm.status === 'INVALID'"
   >Sign up</button>
