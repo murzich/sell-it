@@ -3,6 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { LoginModel } from '../login.model';
 import { emailValidator, valuesEquality } from '../validators-form-controls';
+import {AuthService} from '../../core/auth.service';
+import {tap} from 'rxjs/internal/operators';
 
 @Component({
   selector: 'app-login-form',
@@ -33,7 +35,7 @@ export class LoginFormComponent implements OnInit {
       ])
   });
 
-  constructor() { }
+  constructor(private auth: AuthService) { }
 
   get email(): FormControl { return this.loginForm.get('email') as FormControl; }
   get password(): FormControl { return this.loginForm.get(['passwordGroup', 'password']) as FormControl; }
@@ -50,8 +52,17 @@ export class LoginFormComponent implements OnInit {
   onSubmit(): void {
     if (this.alreadyRegistered) {
       console.log('login', this.loginForm.value);
+      this.auth.login(this.loginForm.value)
+        .subscribe(
+          data => console.log(data)
+        );
     } else {
       console.log('register', this.loginForm.value);
+      this.auth.register(this.loginForm.value)
+        .pipe(
+          tap(data => console.log(data))
+        )
+        .subscribe();
     }
     this.loginForm.reset();
   }
