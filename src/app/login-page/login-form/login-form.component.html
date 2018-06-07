@@ -1,6 +1,6 @@
 <div class="tabs">
   <button (click)="switchForm('login')" type="button" class="tabs__tab login-page__button">Sign in</button>
-  <button (click)="switchForm('signup')" type="button" class="tabs__tab login-page__button">Sign up</button>
+  <button (click)="switchForm('register')" type="button" class="tabs__tab login-page__button">Sign up</button>
 </div>
 
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-page__field">

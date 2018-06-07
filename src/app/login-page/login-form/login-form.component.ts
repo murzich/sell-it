@@ -64,7 +64,7 @@ export class LoginFormComponent implements OnInit {
         this.passwordGroup.clearValidators();
         this.passwordGroup.removeControl('passwordConfirm');
         break;
-      case 'signup':
+      case 'register':
         this.alreadyRegistered = false;
         this.submitButtonText = 'Sign Up';
         this.passwordGroup.setValidators(valuesEquality('password', 'passwordConfirm'));
