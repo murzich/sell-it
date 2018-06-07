@@ -5,8 +5,8 @@ import { Advert } from '../core/advert.model';
 
 @Component({
   selector: 'app-product-page',
-  templateUrl: './productPage.component.html',
-  styleUrls: ['./productPage.component.scss'],
+  templateUrl: './product-page.component.html',
+  styleUrls: ['./product-page.component.scss'],
   providers: []
 })
 export class ProductPageComponent implements OnInit {

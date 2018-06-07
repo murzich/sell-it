@@ -2,8 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-product-item',
-  templateUrl: './productItem.component.html',
-  styleUrls: ['./productItem.component.scss']
+  templateUrl: './product-item.component.html',
+  styleUrls: ['./product-item.component.scss']
 })
 export class ProductItemComponent implements OnInit {
   @Input() id: number;
