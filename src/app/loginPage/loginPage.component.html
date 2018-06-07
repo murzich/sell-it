@@ -4,14 +4,7 @@
       <img src="assets/img/sell-it--white.png" alt="Sell It" class="login-page__img" routerLink="/product">
     </header>
     <div class="login-page__content">
-      <div class="tabs">
-        <button (click)="hasAccount = true" type="button" class="tabs__tab login-page__button" data-fieldset="sign-in">Sign in</button>
-        <button (click)="hasAccount = false" type="button" class="tabs__tab login-page__button" data-fieldset="sign-up">Sign up</button>
-      </div>
-      <div>
-        <app-sign-in-form *ngIf="hasAccount"></app-sign-in-form>
-        <app-sign-up-form #hasAccount *ngIf="!hasAccount"></app-sign-up-form>
-      </div>
+      <app-login-form></app-login-form>
     </div>
     <!--TODO: add to FooterComponent possibility to change innerHTML-->
     <app-footer>Frontend labs 2017</app-footer>
