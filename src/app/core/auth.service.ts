@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { tap } from 'rxjs/internal/operators';
+import {Observable} from 'rxjs';
 
 const basePath = 'http://light-it-04.tk/api/';
 const apiUrlRegister = basePath + 'registration/';
@@ -12,17 +14,20 @@ export class AuthService {
 
   constructor(private httpApi: HttpClient) { }
 
-  login(userData: any) {
+  login(userData: any): Observable<any> {
     // TODO: Mapping from form
     const user = {
       email: userData.email,
       password: userData.passwordGroup.password,
     };
     console.log(user);
-    return this.httpApi.post(apiUrlLogin, user);
+    return this.httpApi.post(apiUrlLogin, user)
+      .pipe(
+        tap(response => localStorage.setItem('token', response.token))
+      );
   }
 
-  register(userData: any) {
+  register(userData: any): Observable<any> {
     // TODO: Mapping from form
     const user = {
       // TODO: mock
@@ -32,6 +37,9 @@ export class AuthService {
       password2: userData.passwordGroup.passwordConfirm,
     };
     console.log(user);
-    return this.httpApi.post(apiUrlRegister, user);
+    return this.httpApi.post(apiUrlRegister, user)
+      .pipe(
+        tap(response => localStorage.setItem('token', response.token))
+      );
   }
 }
