@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { LoginFormComponent } from './login-form/login-form.component';
-import { LoginPageRoutingModule } from './loginPage-routing.module';
-import { LoginPageComponent } from './loginPage.component';
+import { LoginPageComponent } from './login-page.component';
+import { LoginPageRoutingModule } from './login-page-routing.module';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
