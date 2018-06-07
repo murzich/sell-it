@@ -1,0 +1,9 @@
+@import 'detail-page.styles/layout';
+@import 'detail-page.styles/about';
+@import 'detail-page.styles/slider';
+@import 'detail-page.styles/chat';
+
+:host {
+  display: block;
+  position: relative;
+}

@@ -6,7 +6,7 @@ import { AdvertResolverService } from './core/advert-resolver.service';
 const routes: Routes = [
   {path: 'login', loadChildren: './login-page/loginPage.module#LoginPageModule'},
   {path: 'product', loadChildren: './product-page/productPage.module#ProductPageModule'},
-  {path: 'detail/:id', loadChildren: './detail-page/detailPage.module#DetailPageModule', resolve: {advert: AdvertResolverService}},
+  {path: 'detail/:id', loadChildren: './detail-page/detail-page.module#DetailPageModule', resolve: {advert: AdvertResolverService}},
   {path: 'new-advert', loadChildren: './add-advert/add-advert.module#AddAdvertModule'},
   {path: '', redirectTo: 'product', pathMatch: 'full'},
   {path: '**', component: NotFoundComponent}
