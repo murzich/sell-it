@@ -29,7 +29,7 @@ export class LoginFormComponent implements OnInit {
       ])
     },
       [
-        valuesEquality
+        valuesEquality('password', 'passwordConfirm')
       ])
   });
 
@@ -67,8 +67,8 @@ export class LoginFormComponent implements OnInit {
       case 'signup':
         this.alreadyRegistered = false;
         this.submitButtonText = 'Sign Up';
-        this.passwordGroup.addControl('passwordConfirm', new FormControl('', Validators.required));
-        this.passwordGroup.setValidators(valuesEquality);
+        this.passwordGroup.setValidators(valuesEquality('password', 'passwordConfirm'));
+        this.passwordGroup.addControl('passwordConfirm', new FormControl(''));
         break;
       default:
         break;
