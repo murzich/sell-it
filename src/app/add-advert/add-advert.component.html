@@ -1,45 +1,56 @@
 <app-header></app-header>
 
-<form [formGroup]="advertForm" (submit)="onSubmit()">
+<form [formGroup]="advertForm" (submit)="onSubmit()" class="form">
 
-  <label>
-    Theme:
-    <input type="text" formControlName="theme">
-  </label>
-  <div *ngIf="theme.touched || theme.dirty">
-    <span *ngIf="theme.invalid">
-      Required field.
-    </span>
+  <div class="form-group">
+    <label class="form-label" for="add-theme">Theme</label>
+    <input type="text" formControlName="theme" id="add-theme" class="form-control">
+    <div *ngIf="theme.touched || theme.dirty" class="form-validation-error">
+      <span *ngIf="theme.invalid">
+        Required field.
+      </span>
+    </div>
   </div>
 
-  <label>
-    Description:
-    <textarea type="text" formControlName="text"></textarea>
-  </label>
-  <label>
-    Price:
-    <input type="number" formControlName="price">
-  </label>
-  <label>
-    Currency:
-    <input type="number" formControlName="currency">
-  </label>
-  <label>
-    Contract price:
-    <input type="checkbox" formControlName="contract_price">
-  </label>
-  <div formGroupName="location">
-    <label>
-      Location:
-      <input type="text" formControlName="name">
-    </label>
+  <div class="form-group">
+    <label class="form-label" for="add-text">Description</label>
+    <textarea type="text" formControlName="text" id="add-text" class="form-control form-control--textarea"></textarea>
   </div>
-  <label>
-    Active
-    <input type="checkbox" formControlName="is_active">
-  </label>
 
-  <button type="submit">Submit</button>
+  <fieldset>
+    <!--Used entire div, because fieldset can't be flex-->
+    <div class="form-group form-group--row">
+      <div class="form-group">
+        <label class="form-label form-label--inline" for="add-price">Price:</label>
+        <input type="number" formControlName="price" id="add-price" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label form-label--inline" for="add-currency">Currency:</label>
+        <input type="number" formControlName="currency" id="add-currency" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <input type="checkbox" formControlName="contract_price" id="add-contract-price" class="form-control--checkbox">
+        <label  class="form-label form-label--inline" for="add-contract-price">Contract price</label>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="form-group">
+    <div formGroupName="location">
+      <label class="form-label" for="add-location">Location</label>
+      <input type="text" formControlName="name" id="add-location" class="form-control">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input type="checkbox" formControlName="is_active" id="add-active" class="form-control--checkbox">
+    <label class="form-label form-label--inline" for="add-active">Active</label>
+  </div>
+
+  <button type="submit" [disabled]="advertForm.invalid">Submit</button>
 
 </form>
+
 <app-footer></app-footer>
