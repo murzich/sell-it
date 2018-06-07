@@ -16,7 +16,7 @@ export class AddAdvertComponent implements OnInit {
     this.advertForm = fb.group({
       theme: ['', Validators.required],
       text: '',
-      price: 0,
+      price: [0, Validators.min(0)],
       currency: 1,
       contract_price: false,
       location: this.fb.group({
@@ -27,8 +27,10 @@ export class AddAdvertComponent implements OnInit {
   }
 
   get theme(): FormControl {return this.advertForm.get('theme') as FormControl; }
+  get price(): FormControl {return this.advertForm.get('price') as FormControl; }
 
   ngOnInit() {
+    this.advertForm.get('currency').disable();
   }
 
   onSubmit() {

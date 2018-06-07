@@ -23,6 +23,11 @@
       <div class="form-group">
         <label class="form-label form-label--inline" for="add-price">Price:</label>
         <input type="number" formControlName="price" id="add-price" class="form-control">
+        <div *ngIf="price.touched || price.dirty" class="form-validation-error">
+          <span *ngIf="price.invalid">
+            Should be positive number.
+          </span>
+        </div>
       </div>
 
       <div class="form-group">
