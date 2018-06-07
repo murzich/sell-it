@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NotFoundComponent } from './not-found/not-found.component';
+
 import { AdvertResolverService } from './core/advert-resolver.service';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   {path: 'login', loadChildren: './login-page/login-page.module#LoginPageModule'},

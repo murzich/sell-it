@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AdvertService } from '../core/advert.service';
 import { Advert } from '../core/advert.model';
+import { AdvertService } from '../core/advert.service';
 
 @Component({
   selector: 'app-product-page',
@@ -10,9 +10,10 @@ import { Advert } from '../core/advert.model';
   providers: []
 })
 export class ProductPageComponent implements OnInit {
-  public adverts: Advert[];
-  public page: number;
-  public isReadyToScroll: boolean;
+  adverts: Advert[];
+  isReadyToScroll: boolean;
+  page: number;
+
   constructor(private advertService: AdvertService) {
     this.isReadyToScroll = true;
   }
@@ -28,7 +29,7 @@ export class ProductPageComponent implements OnInit {
       );
   }
 
-  public getMoreAdverts() {
+  getMoreAdverts() {
     this.isReadyToScroll = false;
     this.advertService.getNext(this.page)
       .subscribe(

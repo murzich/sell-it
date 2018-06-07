@@ -1,12 +1,11 @@
 <app-header></app-header>
 <main class="main-content">
-  <!--<section class="detail-page">-->
   <div class="slider">
     <img src="{{advert.images[0]?.file}}" alt="The greatest product ever!" class="slider__img">
   </div>
   <div class="about">
     <h1 class="about__title">{{advert.theme}}</h1>
-    <div class="about__vendor">from <a href="#0" class="vendor">{{advert.owner.first_name}} {{advert.owner.last_name}}</a></div>
+    <div class="about__vendor">from <a href="" class="vendor">{{advert.owner.first_name}} {{advert.owner.last_name}}</a></div>
     <div class="about__price">{{advert.price}} $</div>
     <div class="about__description">
       <p>{{advert.text}}</p>
@@ -27,7 +26,7 @@
   <section class="chat">
     <h2 class="chat__title">Chat
       <span class="chat__subtitle">with
-                    <a href="#0" class="chat__vendor chat__vendor--online">{{advert.owner.first_name}} {{advert.owner.last_name}}</a>
+                    <a href="" class="chat__vendor chat__vendor--online">{{advert.owner.first_name}} {{advert.owner.last_name}}</a>
                 </span>
     </h2>
     <div class="chat__area">

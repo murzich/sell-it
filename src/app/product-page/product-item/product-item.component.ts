@@ -7,8 +7,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ProductItemComponent implements OnInit {
   @Input() id: number;
-  @Input() name: string;
   @Input() image: string;
+  @Input() name: string;
   constructor() { }
 
   ngOnInit() {

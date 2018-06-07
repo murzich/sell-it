@@ -1,16 +1,17 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { Advert, AdvertFull } from './advert.model';
+import { Injectable } from '@angular/core';
 import { Observable, OperatorFunction } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { Advert, AdvertFull } from './advert.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdvertService {
+  nextPage: string | null;
   private urlAPI: string;
   private params: any;
-  public nextPage: string | null;
 
   constructor(private http: HttpClient) {
     this.urlAPI = 'http://light-it-04.tk/api/adverts/';
@@ -20,15 +21,24 @@ export class AdvertService {
     };
   }
 
-  public getAdverts() {
+  getAdverts() {
     return this.http.get(this.urlAPI, {params: this.params})
       .pipe(this.adaptResponse());
   }
-  public getNext(offset: number) {
+
+  getNext(offset: number) {
     this.params.offset = (this.params.limit * offset).toString();
     return this.http.get(this.urlAPI, {params: this.params})
       .pipe(this.adaptResponse());
   }
+
+  readAdvert(id: number): Observable<AdvertFull> {
+    return this.http.get(`${this.urlAPI}${id}`)
+      .pipe(
+        map( (response: any) => new AdvertFull(response) )
+      );
+  }
+
   private adaptResponse(): OperatorFunction<any, Advert[]> {
     return map( (response: any) => {
       const results: Advert[] = [];
@@ -36,11 +46,5 @@ export class AdvertService {
       response.results.forEach(item => results.push(new Advert(item)));
       return results;
     });
-  }
-  public readAdvert(id: number): Observable<AdvertFull> {
-    return this.http.get(`${this.urlAPI}${id}`)
-      .pipe(
-        map( (response: any) => new AdvertFull(response) )
-      );
   }
 }

@@ -42,7 +42,6 @@
              placeholder="Confirm Password"
              formControlName="passwordConfirm"
       >
-      <!--TODO: Try to simplify;-->
       <div class="input-error" *ngIf="passwordConfirm.dirty || passwordConfirm.touched">
         <div *ngIf="password.touched && passwordGroup.errors && password.valid && passwordConfirm.touched">
           Passwords are different
