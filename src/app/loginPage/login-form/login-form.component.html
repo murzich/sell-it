@@ -1,4 +1,9 @@
-<form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="login-page__field">
+<div class="tabs">
+  <button (click)="switchForm('login')" type="button" class="tabs__tab login-page__button">Sign in</button>
+  <button (click)="switchForm('signup')" type="button" class="tabs__tab login-page__button">Sign up</button>
+</div>
+
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-page__field">
 
   <input type="email"
          class="login__input"
@@ -31,21 +36,23 @@
       </div>
     </div>
 
-    <input class="login__input"
-           type="password"
-           placeholder="Confirm Password"
-           formControlName="passwordConfirm"
-    >
-    <!--TODO: Try to simplify;-->
-    <div class="input-error" *ngIf="passwordConfirm.dirty || passwordConfirm.touched">
-      <div *ngIf="password.touched && passwordGroup.errors && password.valid && passwordConfirm.touched">
-        Passwords are different
+    <div *ngIf="!alreadyRegistered">
+      <input class="login__input"
+             type="password"
+             placeholder="Confirm Password"
+             formControlName="passwordConfirm"
+      >
+      <!--TODO: Try to simplify;-->
+      <div class="input-error" *ngIf="passwordConfirm.dirty || passwordConfirm.touched">
+        <div *ngIf="password.touched && passwordGroup.errors && password.valid && passwordConfirm.touched">
+          Passwords are different
+        </div>
       </div>
     </div>
   </fieldset>
 
   <button type="submit" class="login__submit login-page__button"
-    [disabled]="signUpForm.status === 'INVALID'"
-  >Sign up</button>
+    [disabled]="loginForm.status === 'INVALID'"
+  >{{submitButtonText}}</button>
 
 </form>

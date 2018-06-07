@@ -37,3 +37,16 @@
 .login__submit {
   margin: 20px 0;
 }
+.input-error {
+  display: block;
+  position: absolute;
+  font-size: 12px;
+}
+
+.tabs {
+  display: flex;
+  margin: -15px;
+  &__tab {
+    margin: 15px;
+  }
+}
