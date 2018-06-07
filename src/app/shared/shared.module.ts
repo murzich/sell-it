@@ -1,30 +1,30 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
-import { InfiniteScrollDirective } from './directives/infiniteScroll/infiniteScroll.directive';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { ScrollToTopDirective } from './directives/scrollToTop/scrollToTop.directive';
-import { ButtonToTopComponent } from './components/buttonToTop/buttonToTop.component';
 import { RouterModule } from '@angular/router';
+
+import { InfiniteScrollDirective } from './directives/infinite-scroll/infinite-scroll.directive';
+import { ScrollToTopDirective } from './directives/scroll-to-top/scroll-to-top.directive';
+import { ButtonToTopComponent } from './components/button-to-top/button-to-top.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
-    InfiniteScrollDirective,
-    HeaderComponent,
-    FooterComponent,
     ButtonToTopComponent,
+    FooterComponent,
+    HeaderComponent,
+    InfiniteScrollDirective,
     ScrollToTopDirective,
   ],
   imports: [
+    CommonModule,
     RouterModule,
-    CommonModule
   ],
   exports: [
-    InfiniteScrollDirective,
-    HeaderComponent,
-    FooterComponent,
     ButtonToTopComponent,
+    FooterComponent,
+    HeaderComponent,
+    InfiniteScrollDirective,
     ScrollToTopDirective
   ],
   providers: []

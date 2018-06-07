@@ -5,7 +5,7 @@ import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/c
 })
 export class InfiniteScrollDirective {
   private crossbar: number;
-  @Input() crossbarDelta: number = 150;
+  @Input() crossbarDelta = 150;
   @Input() goScroll: boolean;
   @Output() reachedBottom = new EventEmitter<any>();
   constructor() {
