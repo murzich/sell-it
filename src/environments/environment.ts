@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiBase: 'http://light-it-04.tk/api',
+  apiBase: 'http://light-it-04.tk/api/',
 };
 
 /*

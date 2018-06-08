@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { AdvertFull } from '../core/advert.model';
+import { AdvertFull } from '../core/models/advert.model';
 
 @Component({
   selector: 'app-detail-page',

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { AdvertFull } from './advert.model';
+import { AdvertFull } from './models/advert.model';
 import { AdvertService } from './advert.service';
 
 @Injectable({

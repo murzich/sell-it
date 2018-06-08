@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { AdvertFull } from '../core/advert.model';
+import { AdvertFull } from '../core/models/advert.model';
 
 @Injectable({
   // TODO: providedIn AddAdvertModule does not work

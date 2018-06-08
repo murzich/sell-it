@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, OperatorFunction } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Advert, AdvertFull } from './advert.model';
+import { Advert, AdvertFull } from './models/advert.model';
 import ApiUrls from './api-urls';
 
 @Injectable({
@@ -32,7 +32,7 @@ export class AdvertService {
   }
 
   readAdvert(id: number): Observable<AdvertFull> {
-    return this.http.get(`${ApiUrls.adverts}/${id}`)
+    return this.http.get(`${ApiUrls.adverts}${id}`)
       .pipe(
         map( (response: any) => new AdvertFull(response) )
       );
