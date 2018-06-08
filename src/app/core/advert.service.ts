@@ -4,17 +4,16 @@ import { Observable, OperatorFunction } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Advert, AdvertFull } from './advert.model';
+import ApiUrls from './api-urls';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdvertService {
   nextPage: string | null;
-  private urlAPI: string;
   private params: any;
 
   constructor(private http: HttpClient) {
-    this.urlAPI = 'http://light-it-04.tk/api/adverts/';
     this.params = {
       'limit': '12',
       'offset': '0'
@@ -22,18 +21,18 @@ export class AdvertService {
   }
 
   getAdverts() {
-    return this.http.get(this.urlAPI, {params: this.params})
+    return this.http.get(ApiUrls.adverts, {params: this.params})
       .pipe(this.adaptResponse());
   }
 
   getNext(offset: number) {
     this.params.offset = (this.params.limit * offset).toString();
-    return this.http.get(this.urlAPI, {params: this.params})
+    return this.http.get(ApiUrls.adverts, {params: this.params})
       .pipe(this.adaptResponse());
   }
 
   readAdvert(id: number): Observable<AdvertFull> {
-    return this.http.get(`${this.urlAPI}${id}`)
+    return this.http.get(`${ApiUrls.adverts}/${id}`)
       .pipe(
         map( (response: any) => new AdvertFull(response) )
       );

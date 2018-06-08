@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/internal/operators';
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
-const basePath = 'http://light-it-04.tk/api/';
-const apiUrlRegister = basePath + 'registration/';
-const apiUrlLogin = basePath + 'login/';
+import ApiUrls from './api-urls';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +19,7 @@ export class AuthService {
       password: userData.passwordGroup.password,
     };
     console.log(user);
-    return this.httpApi.post(apiUrlLogin, user)
+    return this.httpApi.post(ApiUrls.login, user)
       .pipe(
         tap(response => localStorage.setItem('token', response.token))
       );
@@ -37,7 +35,7 @@ export class AuthService {
       password2: userData.passwordGroup.passwordConfirm,
     };
     console.log(user);
-    return this.httpApi.post(apiUrlRegister, user)
+    return this.httpApi.post(ApiUrls.register, user)
       .pipe(
         tap(response => localStorage.setItem('token', response.token))
       );
