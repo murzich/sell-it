@@ -45,12 +45,14 @@ export class LoginFormComponent implements OnInit {
     if (this.alreadyRegistered) {
       this.auth.login(this.loginForm.value)
         .subscribe(
-          this.auth.redirectOnSubscribe
+          this.auth.redirectOnSubscribe,
+          error => console.log(error)
         );
     } else {
       this.auth.register(this.loginForm.value)
         .subscribe(
-          this.auth.redirectOnSubscribe
+          this.auth.redirectOnSubscribe,
+          error => console.log(error)
         );
     }
   }
