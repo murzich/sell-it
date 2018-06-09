@@ -52,7 +52,7 @@ export class UserCredentialsLoginModel {
   }
 }
 
-/** Type used in this application*/
+/** Type of User currently used in the application */
 export class User {
     id?: number;
     username: string;
