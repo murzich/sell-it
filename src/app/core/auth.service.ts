@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/internal/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/internal/operators';
 
 import ApiUrls from './api-urls';
 import { LoginFormModel, RegistrationFormModel } from '../login-page/login.model';
@@ -26,6 +26,7 @@ export class AuthService {
     const user = new UserCredentialsLoginModel(userData);
     return this.httpApi.post<ApiLoginResponse>(ApiUrls.login, user)
       .pipe(
+        catchError(this.handleError),
         tap(response => localStorage.setItem('token', response.token))
       );
   }
@@ -41,7 +42,25 @@ export class AuthService {
     const user = new UserCredentialsRegisterModel(userData);
     return this.httpApi.post<ApiLoginResponse>(ApiUrls.register, user)
       .pipe(
+        catchError(this.handleError),
         tap(response => localStorage.setItem('token', response.token))
       );
+  }
+
+  // TODO: took from Angular.io
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong,
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${JSON.stringify(error.error)}`);
+    }
+    // return an observable with a user-facing error message
+    return throwError(
+      'Something bad happened; please try again later.');
   }
 }
