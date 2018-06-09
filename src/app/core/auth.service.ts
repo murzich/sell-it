@@ -1,11 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/internal/operators';
+import { LoginFormModel, RegistrationFormModel } from '../login-page/login.model';
 
 import ApiUrls from './api-urls';
-import { LoginFormModel, RegistrationFormModel } from '../login-page/login.model';
 import { ApiLoginResponse } from './models/api-response';
 import { UserCredentialsLoginModel, UserCredentialsRegisterModel } from './models/user.model';
 
@@ -16,10 +17,11 @@ export class AuthService {
 
   redirectUrl: string;
 
-  constructor(private httpApi: HttpClient, public router: Router) { }
+  constructor(private httpApi: HttpClient, public router: Router, private cookieService: CookieService) {
+  }
 
   get hasToken(): boolean {
-    return localStorage.token !== undefined;
+    return this.cookieService.get('token') !== undefined;
   }
 
   login(userData: LoginFormModel): Observable<ApiLoginResponse> {
@@ -27,7 +29,10 @@ export class AuthService {
     return this.httpApi.post<ApiLoginResponse>(ApiUrls.login, user)
       .pipe(
         catchError(this.handleError),
-        tap(response => localStorage.setItem('token', response.token))
+        tap(response => {
+          this.cookieService.put('token', response.token);
+          this.cookieService.putObject('user', response.user);
+        })
       );
   }
 
@@ -43,7 +48,10 @@ export class AuthService {
     return this.httpApi.post<ApiLoginResponse>(ApiUrls.register, user)
       .pipe(
         catchError(this.handleError),
-        tap(response => localStorage.setItem('token', response.token))
+        tap(response => {
+          this.cookieService.put('token', response.token);
+          this.cookieService.putObject('user', response.user);
+        })
       );
   }
 
