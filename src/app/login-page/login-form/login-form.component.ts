@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import { LoginModel } from '../login.model';
+import { AuthService } from '../../core/auth.service';
 import { emailValidator, valuesEquality } from '../validators-form-controls';
-import {AuthService} from '../../core/auth.service';
-import {tap} from 'rxjs/internal/operators';
 
 @Component({
   selector: 'app-login-form',
@@ -12,7 +10,7 @@ import {tap} from 'rxjs/internal/operators';
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
-  model = new LoginModel();
+
   alreadyRegistered = false;
   submitButtonText = 'Sign Up';
 
@@ -22,17 +20,16 @@ export class LoginFormComponent implements OnInit {
       emailValidator
     ]),
     passwordGroup: new FormGroup({
-      password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(8)
-      ]),
-      passwordConfirm: new FormControl('', [
-        Validators.required,
-      ])
-    },
-      [
-        valuesEquality('password', 'passwordConfirm')
-      ])
+        password: new FormControl('', [
+          Validators.required,
+          Validators.minLength(8)
+        ]),
+        passwordConfirm: new FormControl('', [
+          Validators.required,
+        ])
+      },
+      [valuesEquality('password', 'passwordConfirm')]
+    )
   });
 
   constructor(private auth: AuthService) { }
@@ -42,29 +39,20 @@ export class LoginFormComponent implements OnInit {
   get passwordConfirm(): FormControl { return this.loginForm.get(['passwordGroup', 'passwordConfirm']) as FormControl; }
   get passwordGroup(): FormGroup { return this.loginForm.get('passwordGroup') as FormGroup; }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
-  /**
-   * TODO: Mock submission method
-   * Form submission.
-   **/
   onSubmit(): void {
     if (this.alreadyRegistered) {
-      console.log('login', this.loginForm.value);
       this.auth.login(this.loginForm.value)
         .subscribe(
-          data => console.log(data)
+          this.auth.redirectOnSubscribe
         );
     } else {
-      console.log('register', this.loginForm.value);
       this.auth.register(this.loginForm.value)
-        .pipe(
-          tap(data => console.log(data))
-        )
-        .subscribe();
+        .subscribe(
+          this.auth.redirectOnSubscribe
+        );
     }
-    this.loginForm.reset();
   }
 
   switchForm(form: string): void {
@@ -80,8 +68,6 @@ export class LoginFormComponent implements OnInit {
         this.submitButtonText = 'Sign Up';
         this.passwordGroup.setValidators(valuesEquality('password', 'passwordConfirm'));
         this.passwordGroup.addControl('passwordConfirm', new FormControl(''));
-        break;
-      default:
         break;
     }
   }
