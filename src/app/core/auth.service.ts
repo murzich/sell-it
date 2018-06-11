@@ -9,6 +9,7 @@ import { LoginFormModel, RegistrationFormModel } from '../login-page/login.model
 import ApiUrls from './api-urls';
 import { ApiLoginResponse } from './models/api-response';
 import { UserCredentialsLoginModel, UserCredentialsRegisterModel } from './models/user.model';
+import {SessionService} from './session-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +18,11 @@ export class AuthService {
 
   redirectUrl: string;
 
-  constructor(private httpApi: HttpClient, public router: Router, private cookieService: CookieService) {
+  constructor(private httpApi: HttpClient, public router: Router, private sessionService: SessionService) {
   }
 
   get hasToken(): boolean {
-    return this.cookieService.get('token') !== undefined;
+    return this.sessionService.token !== undefined;
   }
 
   login(userData: LoginFormModel): Observable<ApiLoginResponse> {
@@ -30,8 +31,8 @@ export class AuthService {
       .pipe(
         catchError(this.handleError),
         tap(response => {
-          this.cookieService.put('token', response.token);
-          this.cookieService.putObject('user', response.user);
+          this.sessionService.token = response.token;
+          this.sessionService.userProfile = response.user;
         })
       );
   }
@@ -49,8 +50,8 @@ export class AuthService {
       .pipe(
         catchError(this.handleError),
         tap(response => {
-          this.cookieService.put('token', response.token);
-          this.cookieService.putObject('user', response.user);
+          this.sessionService.token = response.token;
+          this.sessionService.userProfile = response.user;
         })
       );
   }
