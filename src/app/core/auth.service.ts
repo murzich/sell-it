@@ -56,6 +56,10 @@ export class AuthService {
       );
   }
 
+  verifyEmail(key: {key: string}) {
+    return this.httpApi.post(ApiUrls.verifyEmail, key);
+  }
+
   // TODO: took from Angular.io
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

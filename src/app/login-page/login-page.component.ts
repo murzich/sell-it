@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {AuthService} from '../core/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -8,12 +9,19 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class LoginPageComponent implements OnInit {
 
-  constructor(private router: ActivatedRoute) { }
+  private key: {
+    key: string;
+  };
+
+  constructor(private router: ActivatedRoute, private auth: AuthService) { }
 
   ngOnInit() {
     this.router.queryParams.subscribe(
-      value => console.log(value)
+      (value: {key: string}) => this.key = value
     );
+    if (!!this.key) {
+      this.auth.verifyEmail(this.key).subscribe();
+    }
   }
 
 
