@@ -10,6 +10,7 @@ const routes: Routes = [
   {path: 'product', loadChildren: './product-page/product-page.module#ProductPageModule'},
   {path: 'detail/:id', loadChildren: './detail-page/detail-page.module#DetailPageModule', resolve: {advert: AdvertResolverService}},
   {path: 'new-advert', loadChildren: './add-advert/add-advert.module#AddAdvertModule', canActivate: [AuthGuard]},
+  {path: 'profile', loadChildren: './profile-page/profile-page.module#ProfilePageModule'},
   {path: '', redirectTo: 'product', pathMatch: 'full'},
   {path: '**', component: NotFoundComponent}
 ];
