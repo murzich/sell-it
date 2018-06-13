@@ -11,9 +11,9 @@
     </form>
   </div>
   <div class="user-block">
-    <div class="user" routerLink="/new-advert">
-      <img src="assets/img/user.jpg" alt="usr_img" class="user__img">
-      <span class="user__name">Kim Evans</span>
+    <div class="user" routerLink="/new-advert" *ngIf="user">
+      <img src="{{user.avatar}}" alt="usr_img" class="user__img">
+      <span class="user__name">{{user.username}}</span>
     </div>
     <a routerLink="/login" class="logout">
       <img src="assets/img/fa-sign-out.svg" alt="Logout" class="logout__img">

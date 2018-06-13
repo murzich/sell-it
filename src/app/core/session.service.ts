@@ -22,7 +22,11 @@ export class SessionService {
   }
 
   get userProfile(): UserProfileModel {
-    return JSON.parse(localStorage.userProfile);
+    if (localStorage.userProfile !== undefined) {
+      return JSON.parse(localStorage.userProfile);
+    } else {
+      return null;
+    }
   }
 
   set userProfile(userData: UserProfileModel) {
