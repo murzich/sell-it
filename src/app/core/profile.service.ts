@@ -16,7 +16,7 @@ export class ProfileService {
   }
 
   get profile$(): Observable<UserProfileModel> {
-    return this.profile as Observable<UserProfileModel>;
+    return this.profile.asObservable();
   }
 
   updateProfile(): void {
