@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {AuthService} from '../core/auth.service';
+import { AuthService } from '../core/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -9,20 +9,16 @@ import {AuthService} from '../core/auth.service';
 })
 export class LoginPageComponent implements OnInit {
 
-  private key: {
-    key: string;
-  };
+  private keyObject: { key: string; };
 
   constructor(private router: ActivatedRoute, private auth: AuthService) { }
 
   ngOnInit() {
     this.router.queryParams.subscribe(
-      (value: {key: string}) => this.key = value
+      (value: { key: string }) => this.keyObject = value
     );
-    if (!!this.key) {
-      this.auth.verifyEmail(this.key).subscribe();
+    if (this.keyObject.key !== undefined) {
+      this.auth.verifyEmail(this.keyObject).subscribe();
     }
   }
-
-
 }

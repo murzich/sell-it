@@ -14,7 +14,11 @@ const routes: Routes = [
     loadChildren: './profile-page/profile-page.module#ProfilePageModule',
     resolve: {profile: ProfileResolverService}
   },
-  {path: 'detail/:id', loadChildren: './detail-page/detail-page.module#DetailPageModule', resolve: {advert: AdvertResolverService}},
+  {
+    path: 'detail/:id',
+    loadChildren: './detail-page/detail-page.module#DetailPageModule',
+    resolve: {advert: AdvertResolverService}
+  },
   {path: 'new-advert', loadChildren: './add-advert/add-advert.module#AddAdvertModule', canActivate: [AuthGuard]},
   {path: '', redirectTo: 'product', pathMatch: 'full'},
   {path: '**', component: NotFoundComponent}
