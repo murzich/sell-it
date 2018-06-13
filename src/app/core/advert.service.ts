@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable, OperatorFunction } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { Advert, AdvertFull } from './models/advert.model';
 import ApiUrls from './api-urls';
+import { Advert, AdvertFull } from './models/advert.model';
 
 @Injectable({
   providedIn: 'root'
