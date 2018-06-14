@@ -90,7 +90,6 @@ export class LoginFormComponent implements OnInit {
     this.socialAuthService.signIn(socialPlatformProvider).then(
       (userData) => {
         console.log(socialPlatform + ' sign in data : ' , userData);
-
       }
     );
   }
