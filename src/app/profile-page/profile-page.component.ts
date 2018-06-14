@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { UserProfileModel } from '../core/models/user.model';
 import { ProfileService } from '../core/profile.service';
+import ApiUrls from '../core/api-urls';
 
 @Component({
   selector: 'app-profile-page',
@@ -43,16 +44,13 @@ export class ProfilePageComponent implements OnInit {
   }
 
   onFileChange(event) {
-    const reader = new FileReader();
-    if (event.target.files && event.target.files.length) {
-      const [file] = event.target.files;
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.imageBase64 = reader.result;
-      };
-      // need to run CD since file load runs outside of zone
-      this.cd.markForCheck();
-    }
+    const formData = new FormData();
+    formData.append('avatar', event.target.files[0]);
+    console.log('formData: ', formData.get('avatar'));
+    event.target.addEventListener('loadend', () => {console.log('formData: ', formData.get('avatar'));})
+    var request = new XMLHttpRequest();
+    request.open("POST", ApiUrls.adverts);
+    request.send(formData);
   }
 
   private prepareProfile(): UserProfileModel {
