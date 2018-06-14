@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -16,7 +16,9 @@ export class ProfilePageComponent implements OnInit {
 
   profileForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, private profileService: ProfileService) {
+  imageBase64: string;
+
+  constructor(private route: ActivatedRoute, private profileService: ProfileService, private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -37,6 +39,28 @@ export class ProfilePageComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.profileForm.value);
+    this.profileService.submitProfile(this.prepareProfile());
+  }
+
+  onFileChange(event) {
+    const reader = new FileReader();
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.imageBase64 = reader.result;
+      };
+      // need to run CD since file load runs outside of zone
+      this.cd.markForCheck();
+    }
+  }
+
+  private prepareProfile(): UserProfileModel {
+    const formModel = this.profileForm.value;
+    formModel.location = {name: formModel.location};
+    formModel.id = this.profileData.id;
+    formModel.email = this.profileData.email;
+    formModel.avatar = this.imageBase64;
+    return formModel;
   }
 }

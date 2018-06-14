@@ -1,7 +1,7 @@
 <app-header></app-header>
 <main>
   <h1>Edit your profile</h1>
-  <p>Your email: @@@.com</p>
+  <p>Your email: {{profileData.email}}</p>
   <form [formGroup]="profileForm" (submit)="onSubmit()">
     <div>
       <label for="username">Username: </label>
@@ -16,7 +16,8 @@
     <div>
       <label for="avatar">Avatar</label>
       <img src="{{profileData.avatar}}" alt="avatar">
-      <input type="file" id="avatar" accept="image/jpeg, image/png, image/jpg, image/gif" formControlName="avatar">
+      <input type="file" id="avatar" accept="image/jpeg, image/png, image/jpg, image/gif"
+             formControlName="avatar" (change)="onFileChange($event)">
     </div>
     <div>
       <label for="location">Location:</label>
