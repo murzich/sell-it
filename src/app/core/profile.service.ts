@@ -12,10 +12,13 @@ export class ProfileService {
   private profile = new BehaviorSubject(this.sessionProfile);
 
   constructor(private sessionService: SessionService) {
-    this.updateProfile();
   }
 
   get profile$(): Observable<UserProfileModel> {
+    if (this.sessionService.userProfile === null && this.sessionService.token !== undefined) {
+      return this.sessionService.getProfileFromApi$;
+    }
+    this.updateProfile();
     return this.profile.asObservable();
   }
 

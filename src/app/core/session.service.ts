@@ -1,5 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import ApiUrls from './api-urls';
 
 import { UserProfileModel } from './models/user.model';
 
@@ -8,7 +13,7 @@ import { UserProfileModel } from './models/user.model';
 })
 export class SessionService {
 
-  constructor(private cookie: CookieService) {
+  constructor(private cookie: CookieService, private http: HttpClient) {
   }
 
   get token(): string {
@@ -37,5 +42,11 @@ export class SessionService {
     } else {
       localStorage.removeItem('userProfile');
     }
+  }
+
+  get getProfileFromApi$(): Observable<UserProfileModel> {
+    return this.http.get<UserProfileModel>(ApiUrls.profile).pipe(
+      map(res => this.userProfile = res)
+    );
   }
 }
