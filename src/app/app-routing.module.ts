@@ -4,15 +4,23 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdvertResolverService } from './core/advert-resolver.service';
 import { AuthGuard } from './core/auth-guard.service';
 import { ProfileResolverService } from './core/profile-resolver.service';
+import { UnAuthGuard } from './core/unauth-guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
+  {
+    path: 'login',
+    pathMatch: 'full',
+    loadChildren: './login-page/login-page.module#LoginPageModule',
+    canActivate: [UnAuthGuard],
+  },
   {path: 'login', loadChildren: './login-page/login-page.module#LoginPageModule'},
   {path: 'product', loadChildren: './product-page/product-page.module#ProductPageModule'},
   {
     path: 'profile',
     loadChildren: './profile-page/profile-page.module#ProfilePageModule',
-    resolve: {profile: ProfileResolverService}
+    resolve: {profile: ProfileResolverService},
+    canActivate: [AuthGuard],
   },
   {
     path: 'detail/:id',
