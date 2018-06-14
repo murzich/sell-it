@@ -67,4 +67,6 @@
     [disabled]="loginForm.status === 'INVALID'"
   >{{submitButtonText}}</button>
 
+  <button type="button" class="login__submit login-page__button" (click)="socialSignIn('google')">Google OAuth</button>
+
 </form>

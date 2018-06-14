@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  AuthService as SocialAuthService,
+  GoogleLoginProvider
+} from 'angular5-social-login';
 
 import { AuthService } from '../../core/auth.service';
 import { emailValidator, valuesEquality } from '../validators-form-controls';
@@ -32,7 +36,7 @@ export class LoginFormComponent implements OnInit {
     )
   });
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private socialAuthService: SocialAuthService) { }
 
   get email(): FormControl { return this.loginForm.get('email') as FormControl; }
   get password(): FormControl { return this.loginForm.get(['passwordGroup', 'password']) as FormControl; }
@@ -73,4 +77,23 @@ export class LoginFormComponent implements OnInit {
         break;
     }
   }
+
+
+  public socialSignIn(socialPlatform: string) {
+    let socialPlatformProvider;
+    if (socialPlatform === 'facebook') {
+      // socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
+    } else if (socialPlatform === 'google') {
+      socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
+    }
+
+    this.socialAuthService.signIn(socialPlatformProvider).then(
+      (userData) => {
+        console.log(socialPlatform + ' sign in data : ' , userData);
+
+      }
+    );
+  }
+
+
 }
