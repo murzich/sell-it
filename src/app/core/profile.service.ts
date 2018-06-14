@@ -9,7 +9,7 @@ import { SessionService } from './session.service';
 })
 export class ProfileService {
 
-  private profile = new BehaviorSubject(null);
+  private profile = new BehaviorSubject(this.sessionProfile);
 
   constructor(private sessionService: SessionService) {
     this.updateProfile();
@@ -19,7 +19,15 @@ export class ProfileService {
     return this.profile.asObservable();
   }
 
+  private get sessionProfile(): UserProfileModel {
+    return this.sessionService.userProfile;
+  }
+
+  private set sessionProfile(profileData: UserProfileModel) {
+    this.sessionService.userProfile = profileData;
+  }
+
   updateProfile(): void {
-    this.profile.next(this.sessionService.userProfile);
+    this.profile.next(this.sessionProfile);
   }
 }

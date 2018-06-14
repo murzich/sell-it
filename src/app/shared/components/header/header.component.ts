@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
 import { UserProfileModel } from '../../../core/models/user.model';
 import { ProfileService } from '../../../core/profile.service';
 
@@ -16,6 +17,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.profileService.profile$
+      .pipe(
+        take(1)
+      )
       .subscribe(
         userProfile => this.user = userProfile
       );
