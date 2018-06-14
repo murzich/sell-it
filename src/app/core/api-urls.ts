@@ -9,4 +9,5 @@ export default class ApiUrls {
   }
   static get register() { return environment.apiBase + 'registration/'; }
   static get verifyEmail() { return environment.apiBase + 'verify-email/'; }
+  static get googleAuth() { return environment.apiBase + 'rest-auth/google/'; }
 }

@@ -74,4 +74,9 @@ export class AuthService {
     // return an observable with a user-facing error message
     return throwError(error.error);
   }
+
+  loginByGoogle(access_token) {
+    const body = { access_token };
+    return this.httpApi.post(ApiUrls.googleAuth, body);
+  }
 }
