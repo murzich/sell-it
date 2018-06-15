@@ -1,4 +1,5 @@
 import { LoginFormModel, RegistrationFormModel } from '../../login-page/login.model';
+
 /**
  * Type of user returned by API
  * */
@@ -8,7 +9,7 @@ export class UserProfileModel {
    * for update - POST or PATCH jpg, jpeg, png or gif file in base64
    * on GET - returns url string
    * */
-  avatar: string | null;
+  avatar?: string | null;
   /**
    * User color scheme
    * acceptable types:
@@ -18,14 +19,33 @@ export class UserProfileModel {
    * 'hsl(hue, saturation, lightness)'
    * 'hsla(hue, saturation, lightness, alpha)'
    * */
-  color_scheme: string | null;
-  email: string;
-  first_name: string;
-  id: number;
-  language: string | null;
-  last_name: string;
-  location: {name: string} | null;
-  username: string;
+  color_scheme?: string | null;
+  email?: string;
+  first_name?: string;
+  id?: number;
+  language?: string | null;
+  last_name?: string;
+  location?: { name: string } | null | string;
+  username?: string;
+}
+
+export class UserProfile extends UserProfileModel {
+  constructor(json: UserProfileModel) {
+    super();
+    this.avatar = json.avatar;
+    this.color_scheme = json.color_scheme;
+    this.email = json.email;
+    this.first_name = json.first_name;
+    this.id = json.id;
+    this.language = json.language;
+    this.last_name = json.last_name;
+    this.username = json.username;
+    if (typeof json.location === 'string') {
+      this.location = {name: json.location};
+    } else {
+      this.location = json.location;
+    }
+  }
 }
 
 export class UserCredentialsRegisterModel {
@@ -50,29 +70,4 @@ export class UserCredentialsLoginModel {
     this.email = formData.email;
     this.password = formData.passwordGroup.password;
   }
-}
-
-/** Type of User currently used in the application */
-export class User {
-    id?: number;
-    username: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-    avatar?: string;
-    location?: string;
-    color_scheme?: string;
-    language?: string;
-
-    constructor(json: any) {
-      this.id = json.id;
-      this.username = json.username;
-      this.email = json.email;
-      this.first_name = json.first_name;
-      this.last_name = json.last_name;
-      this.avatar = !json.avatar ? 'assets/img/default.png' : json.avatar;
-      this.location = json.location;
-      this.color_scheme = json.color_scheme;
-      this.language = json.language;
-    }
 }

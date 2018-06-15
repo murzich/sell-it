@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { UserProfileModel } from '../core/models/user.model';
+import { UserProfile, UserProfileModel } from '../core/models/user.model';
 import { ProfileService } from '../core/profile.service';
 
 @Component({
@@ -11,17 +11,19 @@ import { ProfileService } from '../core/profile.service';
   styleUrls: ['./profile-page.component.css']
 })
 export class ProfilePageComponent implements OnInit {
-
   profileData: UserProfileModel;
-
   profileForm: FormGroup;
 
-  imageBase64: string;
+  private imageBase64: string;
 
-  constructor(private route: ActivatedRoute, private profileService: ProfileService, private cd: ChangeDetectorRef) {
+  constructor(private route: ActivatedRoute, private profileService: ProfileService) {
   }
 
   ngOnInit() {
+    /**
+     * Takes data from resolver
+     * Without resolver form throws errors on Initializing
+     */
     this.route.data
       .subscribe(
         data => this.profileData = data.profile
@@ -32,17 +34,20 @@ export class ProfilePageComponent implements OnInit {
       first_name: new FormControl(this.profileData.first_name),
       last_name: new FormControl(this.profileData.last_name),
       avatar: new FormControl(''),
-      location: new FormControl(this.profileData.location.name),
+      location: new FormControl(
+        (this.profileData.location) ? this.profileData.location['name'] : null
+      ),
       color_scheme: new FormControl(this.profileData.color_scheme),
       language: new FormControl(this.profileData.language)
     });
   }
 
-  onSubmit() {
-    this.profileService.submitProfile(this.prepareProfile());
-  }
-
-  onFileChange(event) {
+  /**
+   * Encodes chosen file into base64
+   * @param event target onClick
+   * @return {void} assign encoded result to **this.imageBase64** in callback
+   */
+  onFileChange(event): void {
     const reader = new FileReader();
     if (event.target.files && event.target.files.length) {
       const [file] = event.target.files;
@@ -50,17 +55,22 @@ export class ProfilePageComponent implements OnInit {
       reader.onload = () => {
         this.imageBase64 = reader.result;
       };
-      // need to run CD since file load runs outside of zone
-      this.cd.markForCheck();
     }
   }
 
+  onSubmit() {
+    this.profileService.submitProfile(this.prepareProfile());
+  }
+
+  /**
+   * Converts form data to API acceptable type
+   * @return {UserProfileModel} converted profile object, which is ready for putting to API server
+   */
   private prepareProfile(): UserProfileModel {
-    const formModel = this.profileForm.value;
-    formModel.location = {name: formModel.location};
-    formModel.id = this.profileData.id;
-    formModel.email = this.profileData.email;
-    formModel.avatar = this.imageBase64;
-    return formModel;
+    return new UserProfile({
+      ...this.profileData,
+      ...this.profileForm.value,
+      ...{avatar: this.imageBase64}
+    });
   }
 }
