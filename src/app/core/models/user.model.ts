@@ -53,6 +53,12 @@ export class UserProfile extends User {
   constructor(json: UserProfile) {
     super(json);
     this.avatar = (json.avatar === null) ? this.avatar : json.avatar || undefined;
+    /**
+     * For resetting avatar image on backend is necessary to send an empty string
+     */
+    if (json.avatar === '') {
+      this.avatar = '';
+    }
     this.color_scheme = json.color_scheme || undefined;
     this.email = json.email;
     this.first_name = json.first_name;

@@ -69,6 +69,13 @@ export class ProfilePageComponent implements OnInit {
   }
 
   /**
+   * For resetting avatar image on backend is necessary to send an empty string
+   */
+  resetAvatar() {
+    this.imageBase64 = '';
+  }
+
+  /**
    * Converts form data to API acceptable type
    * @return {UserProfile} converted profile object, which is ready for putting to API server
    */

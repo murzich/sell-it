@@ -14,10 +14,12 @@
       <input type="text" id="last_name" formControlName="last_name">
     </div>
     <div>
-      <label for="avatar">Avatar</label>
-      <img src="{{profileData.avatar}}" alt="avatar">
+      <label for="avatar">Avatar <br>
+        <img src="{{profileData.avatar}}" alt="avatar">
+      </label>
       <input type="file" id="avatar" accept="image/jpeg, image/png, image/jpg, image/gif"
              formControlName="avatar" (change)="onFileChange($event)">
+      <button type="button" (click)="resetAvatar()">reset img</button>
     </div>
     <div>
       <label for="location">Location:</label>
