@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { UserProfile, UserProfileModel } from '../core/models/user.model';
+import { UserProfile } from '../core/models/user.model';
 import { ProfileService } from '../core/profile.service';
 
 @Component({
@@ -11,10 +11,10 @@ import { ProfileService } from '../core/profile.service';
   styleUrls: ['./profile-page.component.css']
 })
 export class ProfilePageComponent implements OnInit {
-  profileData: UserProfileModel;
+  profileData: UserProfile;
   profileForm: FormGroup;
 
-  private imageBase64: string;
+  private imageBase64: string | undefined;
 
   constructor(private route: ActivatedRoute, private profileService: ProfileService) {
   }
@@ -55,18 +55,24 @@ export class ProfilePageComponent implements OnInit {
       reader.onload = () => {
         this.imageBase64 = reader.result;
       };
+    } else {
+      this.imageBase64 = undefined;
     }
   }
 
   onSubmit() {
-    this.profileService.submitProfile(this.prepareProfile());
+    this.profileService.putProfile(this.prepareProfile());
+  }
+
+  onUpdate() {
+    this.profileService.patchProfile(this.prepareProfile());
   }
 
   /**
    * Converts form data to API acceptable type
-   * @return {UserProfileModel} converted profile object, which is ready for putting to API server
+   * @return {UserProfile} converted profile object, which is ready for putting to API server
    */
-  private prepareProfile(): UserProfileModel {
+  private prepareProfile(): UserProfile {
     return new UserProfile({
       ...this.profileData,
       ...this.profileForm.value,

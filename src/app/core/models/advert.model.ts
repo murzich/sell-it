@@ -1,5 +1,5 @@
 import { AdvertImage } from './image.model';
-import { UserProfile, UserProfileModel } from './user.model';
+import { User } from './user.model';
 
 export class Advert {
   // TODO: Parse string by `new Date("...");`
@@ -11,7 +11,7 @@ export class Advert {
   images: AdvertImage[];
   isActive?: boolean;
   location?: any;
-  owner?: UserProfileModel;
+  owner?: User;
   price?: number;
   text?: string;
   theme: string;
@@ -29,7 +29,7 @@ export class Advert {
 export class AdvertFull extends Advert {
   constructor(json: any) {
     super(json);
-    this.owner = new UserProfile(json.owner);
+    this.owner = new User(json.owner);
     this.price = json.price;
     this.text = json.text;
   }

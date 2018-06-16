@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { take } from 'rxjs/operators';
-import { UserProfileModel } from '../../../core/models/user.model';
+import { UserProfile } from '../../../core/models/user.model';
 import { ProfileService } from '../../../core/profile.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { ProfileService } from '../../../core/profile.service';
 })
 export class HeaderComponent implements OnInit {
 
-  user: UserProfileModel;
+  user: UserProfile;
 
   constructor(private profileService: ProfileService) {
   }

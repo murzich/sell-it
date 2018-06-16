@@ -1,50 +1,68 @@
 import { LoginFormModel, RegistrationFormModel } from '../../login-page/login.model';
 
 /**
- * Type of user returned by API
- * */
-export class UserProfileModel {
+ * This image inserted as avatar image when the User doesn't have one
+ * @type {string}
+ */
+export const defaultUserAvatar = 'assets/img/default.png';
+
+/**
+ * Common type of User registered on backend
+ */
+export class User {
   /**
    * User picture avatar
-   * for update - POST or PATCH jpg, jpeg, png or gif file in base64
-   * on GET - returns url string
-   * */
-  avatar?: string | null;
+   * for update - <tt>POST</tt> or <tt>PATCH</tt> jpg, jpeg, png or gif file in base64
+   * on <tt>GET</tt> - returns url string
+   */
+  avatar: string | null;
+  email: string;
+  first_name?: string;
+  id: number;
+  last_name?: string;
+  username: string;
+
+  constructor(json: User) {
+    this.avatar = json.avatar || defaultUserAvatar;
+    this.email = json.email;
+    this.first_name = json.first_name;
+    this.id = json.id;
+    this.last_name = json.last_name;
+    this.username = json.username;
+  }
+}
+
+/**
+ * Type of current logged in User
+ */
+export class UserProfile extends User {
   /**
    * User color scheme
    * acceptable types:
-   * '#RRGGBB'
-   * 'rgb(rrr, ggg, bbb)'
-   * 'rgba(rrr, ggg, bbb, opacity)'
-   * 'hsl(hue, saturation, lightness)'
-   * 'hsla(hue, saturation, lightness, alpha)'
-   * */
+   * <pre>
+   * #RRGGBB
+   * rgb (rrr, ggg, bbb)
+   * rgba(rrr, ggg, bbb, opacity)
+   * hsl (hue, saturation, lightness)
+   * hsla(hue, saturation, lightness, alpha)</pre>
+   */
   color_scheme?: string | null;
-  email?: string;
-  first_name?: string;
-  id?: number;
   language?: string | null;
-  last_name?: string;
   location?: { name: string } | null | string;
-  username?: string;
-}
 
-export class UserProfile extends UserProfileModel {
-  constructor(json: UserProfileModel) {
-    super();
-    this.avatar = json.avatar;
-    this.color_scheme = json.color_scheme;
+  constructor(json: UserProfile) {
+    super(json);
+    this.avatar = (json.avatar === null) ? this.avatar : json.avatar || undefined;
+    this.color_scheme = json.color_scheme || undefined;
     this.email = json.email;
     this.first_name = json.first_name;
     this.id = json.id;
     this.language = json.language;
     this.last_name = json.last_name;
     this.username = json.username;
-    if (typeof json.location === 'string') {
-      this.location = {name: json.location};
-    } else {
-      this.location = json.location;
-    }
+    this.location = (typeof json.location === 'string')
+      ? this.location = {name: json.location}
+      : this.location = json.location || undefined;
   }
 }
 

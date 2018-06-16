@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import ApiUrls from './api-urls';
 
-import { UserProfileModel } from './models/user.model';
+import { UserProfile } from './models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,15 +28,15 @@ export class SessionService {
     }
   }
 
-  get userProfile(): UserProfileModel {
+  get userProfile(): UserProfile {
     if (localStorage.userProfile !== undefined) {
-      return JSON.parse(localStorage.userProfile);
+      return new UserProfile(JSON.parse(localStorage.userProfile));
     } else {
       return null;
     }
   }
 
-  set userProfile(userData: UserProfileModel) {
+  set userProfile(userData: UserProfile) {
     if (userData !== null) {
       localStorage.userProfile = JSON.stringify(userData);
     } else {
@@ -44,8 +44,8 @@ export class SessionService {
     }
   }
 
-  get getProfileFromApi$(): Observable<UserProfileModel> {
-    return this.http.get<UserProfileModel>(ApiUrls.profile).pipe(
+  get getProfileFromApi$(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(ApiUrls.profile).pipe(
       map(res => this.userProfile = res)
     );
   }
