@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { take } from 'rxjs/operators';
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { UserProfile } from '../../../core/models/user.model';
 import { ProfileService } from '../../../core/profile.service';
 
@@ -8,20 +8,19 @@ import { ProfileService } from '../../../core/profile.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnDestroy {
 
   user: UserProfile;
+  subscription: Subscription;
 
   constructor(private profileService: ProfileService) {
-  }
-
-  ngOnInit() {
-    this.profileService.profile$
-      .pipe(
-        take(1)
-      )
+    this.subscription = this.profileService.profile$
       .subscribe(
         userProfile => this.user = userProfile
       );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

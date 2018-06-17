@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AdvertResolverService } from './core/advert-resolver.service';
 import { AuthGuard } from './core/auth-guard.service';
-import { ProfileResolverService } from './core/profile-resolver.service';
 import { UnAuthGuard } from './core/unauth-guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 
@@ -19,7 +18,6 @@ const routes: Routes = [
   {
     path: 'profile',
     loadChildren: './profile-page/profile-page.module#ProfilePageModule',
-    resolve: {profile: ProfileResolverService},
     canActivate: [AuthGuard],
   },
   {

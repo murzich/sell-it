@@ -46,7 +46,10 @@ export class SessionService {
 
   get getProfileFromApi$(): Observable<UserProfile> {
     return this.http.get<UserProfile>(ApiUrls.profile).pipe(
-      map(res => this.userProfile = res)
+      map(res => {
+        this.userProfile = res;
+        return new UserProfile(res);
+      })
     );
   }
 }
