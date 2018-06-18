@@ -34,7 +34,8 @@ export class ProfilePageComponent implements OnDestroy {
   constructor(private route: ActivatedRoute, private profileService: ProfileService) {
     this.subscriptions = this.profileService.profile$
       .pipe(
-        // TODO: add errors handling to display them in view
+        // TODO: add errors handling to display them in view;
+        // keeps observable subscribed after HttpClient error
         onErrorResumeNext(
           this.profileService.profile$
         )
