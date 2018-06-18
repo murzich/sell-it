@@ -26,6 +26,7 @@ export class AuthService {
   constructor(private httpApi: HttpClient, public router: Router, private sessionService: SessionService) {
   }
 
+  // TODO: Change to BehaviorSubject
   get hasToken(): boolean {
     return this.sessionService.token !== undefined;
   }
@@ -57,6 +58,22 @@ export class AuthService {
   loginByGoogle(access_token) {
     const body = { access_token };
     return this.httpApi.post(ApiUrls.googleAuth, body);
+  }
+
+  /**
+   * Logout
+   * deletes on backend the Token object assigned to the current User object
+   * clears current SessionService
+   * @see SessionService.clearSession
+   */
+  get logout$() {
+    return this.httpApi.get(ApiUrls.logout).pipe(
+      tap(res => {
+        console.log(res);
+        this.sessionService.clearSession();
+        // TODO: When hasToken became BehaviorSubject do .next(false);
+      })
+    );
   }
 
   /**

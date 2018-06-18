@@ -15,7 +15,7 @@
       <img src="{{user.avatar}}" alt="usr_img" class="user__img">
       <span class="user__name">{{user.username}}</span>
     </div>
-    <a routerLink="/login" class="logout">
+    <a routerLink="/login" (click)="logout()" class="logout">
       <img src="assets/img/fa-sign-out.svg" alt="Logout" class="logout__img">
     </a>
   </div>
