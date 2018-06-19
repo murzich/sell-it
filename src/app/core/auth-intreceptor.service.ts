@@ -11,7 +11,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.sessionService.token !== undefined) {
+    if (this.sessionService.token !== undefined && !this.sessionService.isTokenExpired()) {
       const authHeader = `JWT ${this.sessionService.token}`;
       const authReq = req.clone({headers: req.headers.set('Authorization', authHeader )});
       return next.handle(authReq);

@@ -13,6 +13,7 @@ import { UserProfile } from './models/user.model';
  * Token stores in cookies. UserProfile - in localStorage
  * @see clearSession
  * @see getProfileFromApi$
+ * @see isTokenExpired
  * @see token
  * @see userProfile
  */
@@ -34,6 +35,7 @@ export class SessionService {
     this.userProfile = null;
   }
 
+  // TODO: move to ProfileService
   /**
    * Observable for getting new User's profile data from API.
    * On mediation writes response into localStorage & converts it to {@link UserProfile} object type
@@ -48,6 +50,16 @@ export class SessionService {
       })
     );
   }
+
+  /**
+   * Checks an expired date of the current JWT token
+   * @return {boolean}
+   * @see SessionService
+   */
+  isTokenExpired(): boolean {
+    console.log(Date.now() >= (JSON.parse(atob(this.token.split('.')[1])).exp * 1000));
+    return Date.now() >= (JSON.parse(atob(this.token.split('.')[1])).exp * 1000);
+}
 
   /**
    * Authorization token
