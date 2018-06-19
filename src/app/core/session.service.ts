@@ -57,8 +57,11 @@ export class SessionService {
    * @see SessionService
    */
   isTokenExpired(): boolean {
-    console.log(Date.now() >= (JSON.parse(atob(this.token.split('.')[1])).exp * 1000));
-    return Date.now() >= (JSON.parse(atob(this.token.split('.')[1])).exp * 1000);
+    const token = this.token;
+    if (token) {
+      return Date.now() >= (JSON.parse(atob(token.split('.')[1])).exp * 1000);
+    }
+    return false;
 }
 
   /**

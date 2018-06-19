@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, throwError } from 'rxjs';
+import { EMPTY, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/internal/operators';
 import { LoginFormModel, RegistrationFormModel } from '../login-page/login.model';
 
@@ -108,6 +108,26 @@ export class AuthService {
           this.sessionService.userProfile = response.user;
         })
       );
+  }
+
+  /**
+   * Send a post request to API with the current token for obtaining a new refreshed valid token.
+   * Needs to be subscribed.
+   * @see SessionService.token
+   */
+  tokenRefresh(): Observable<any> {
+    const token = this.sessionService.token;
+    if (token) {
+      const body = {token: token};
+      return this.httpApi.post(ApiUrls.tokenRefresh, body)
+        .pipe(
+          // TODO: error handling
+          tap((res: any) => this.sessionService.token = res.token),
+        );
+    } else {
+      // TODO: throw error if empty
+      return EMPTY;
+    }
   }
 
   /**
