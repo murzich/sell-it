@@ -56,10 +56,11 @@ export class SessionService {
    * @return {boolean}
    * @see SessionService
    */
+  // TODO: After adding expiration date into cookie is not necessary
   isTokenExpired(): boolean {
     const token = this.token;
     if (token) {
-      return Date.now() >= (JSON.parse(atob(token.split('.')[1])).exp * 1000);
+      return Date.now() >= this.tokenExpDate(token).getDate();
     }
     return false;
 }
@@ -75,7 +76,9 @@ export class SessionService {
    */
   set token(cookieToken: string | null) {
     if (cookieToken !== null) {
-      this.cookie.put('token', cookieToken);
+      this.cookie.put('token', cookieToken, {
+        expires: this.tokenExpDate(cookieToken)
+      });
     } else {
       this.cookie.remove('token');
     }
@@ -105,5 +108,17 @@ export class SessionService {
     } else {
       return null;
     }
+  }
+
+  /**
+   * Returns an expiration date of an input token
+   * @return {Date}
+   * @param token {string} Token string obtained from server
+   * @see SessionService
+   */
+  private tokenExpDate(token: string): Date {
+    return new Date(
+      JSON.parse(atob(token.split('.')[1])).exp * 1000
+    );
   }
 }
