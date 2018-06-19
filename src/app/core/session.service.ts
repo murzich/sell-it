@@ -1,10 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
-import ApiUrls from './api-urls';
 
 import { UserProfile } from './models/user.model';
 
@@ -12,7 +7,7 @@ import { UserProfile } from './models/user.model';
  * Service for storing authentication data & current user profile.
  * Token stores in cookies. UserProfile - in localStorage
  * @see clearSession
- * @see getProfileFromApi$
+ * @see isTokenExpired
  * @see token
  * @see userProfile
  */
@@ -21,7 +16,7 @@ import { UserProfile } from './models/user.model';
 })
 export class SessionService {
 
-  constructor(private cookie: CookieService, private http: HttpClient) {
+  constructor(private cookie: CookieService) {
   }
 
   /**
@@ -32,21 +27,6 @@ export class SessionService {
   clearSession(): void {
     this.token = null;
     this.userProfile = null;
-  }
-
-  /**
-   * Observable for getting new User's profile data from API.
-   * On mediation writes response into localStorage & converts it to {@link UserProfile} object type
-   * @return {Observable<UserProfile>}
-   * @see SessionService
-   */
-  get getProfileFromApi$(): Observable<UserProfile> {
-    return this.http.get<UserProfile>(ApiUrls.profile).pipe(
-      map(res => {
-        this.userProfile = res;
-        return new UserProfile(res);
-      })
-    );
   }
 
   /**

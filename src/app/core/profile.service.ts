@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { switchMapTo, tap } from 'rxjs/operators';
+import { map, switchMapTo, tap } from 'rxjs/operators';
 
 import ApiUrls from './api-urls';
 
@@ -28,17 +28,23 @@ export class ProfileService {
   constructor(private sessionService: SessionService, private http: HttpClient) { }
 
   /**
-   * Profile observable projects Profile object of current user for subscribers in components
+   * Profile observable projects Profile object of current user for subscribers in components.
    * If authorization token exists but User's profile object is absent, gets new one from API.
-   * Then throws received User's Profile to {@link profile} BehaviorSubject & switch to it's observable
+   * Then throws received User's Profile to {@link profile} BehaviorSubject & switch to it's observable.
    * @return {Observable<UserProfile>}
-   * @see SessionService.getProfileFromApi$
+   * @see profile
+   * @see SessionService.userProfile
    */
   get profile$(): Observable<UserProfile> {
     if (this.sessionService.userProfile === null && this.sessionService.token !== undefined) {
-      return this.sessionService.getProfileFromApi$
+      return this.http.get<UserProfile>(ApiUrls.profile)
         .pipe(
-          tap(res => this.profile.next(res)),
+          map(res => {
+            const userProfile = new UserProfile(res);
+            this.profile.next(userProfile);
+            this.sessionService.userProfile = userProfile;
+            return userProfile;
+          }),
           switchMapTo(this.profile.asObservable())
         );
     }
