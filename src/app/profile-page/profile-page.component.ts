@@ -1,8 +1,10 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { onErrorResumeNext } from 'rxjs/operators';
+import { AuthService } from '../core/auth.service';
 
 import { UserProfile } from '../core/models/user.model';
 import { ProfileService } from '../core/profile.service';
@@ -31,7 +33,7 @@ export class ProfilePageComponent implements OnDestroy {
   private imageBase64: string;
   private subscriptions: Subscription;
 
-  constructor(private route: ActivatedRoute, private profileService: ProfileService) {
+  constructor(private route: ActivatedRoute, private profileService: ProfileService, private auth: AuthService) {
     this.subscriptions = this.profileService.profile$
       .pipe(
         // TODO: add errors handling to display them in view;
@@ -78,6 +80,13 @@ export class ProfilePageComponent implements OnDestroy {
       this.profileService.patchProfile$(this.prepareProfile())
         .subscribe()
     );
+  }
+
+  // TODO: refresh token button
+  onTokenRefresh() {
+    this.auth.tokenRefresh().subscribe({
+      error: (err: HttpErrorResponse) => alert(Object.entries(err.error))
+    });
   }
 
   /**
