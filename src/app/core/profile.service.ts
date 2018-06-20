@@ -25,7 +25,20 @@ export class ProfileService {
    */
   private profile = new BehaviorSubject(this.sessionProfile || <UserProfile>{});
 
-  constructor(private sessionService: SessionService, private http: HttpClient) { }
+  constructor(private sessionService: SessionService, private http: HttpClient) {
+    // Watch for change of login
+    // TODO: Maybe would be better to flatten with profile$
+    this.sessionService.isLoggedIn$
+      .subscribe(
+        isLoggedIn => {
+          if (isLoggedIn) {
+            this.profile.next(this.sessionProfile);
+          } else {
+            this.profile.next(<UserProfile>{});
+          }
+        }
+      );
+  }
 
   /**
    * Profile observable projects Profile object of current user for subscribers in components.

@@ -43,10 +43,9 @@ export class AuthService {
     return this.httpApi.post<ApiLoginResponse>(ApiUrls.login, user)
       .pipe(
         catchError(this.handleError),
-        tap(response => {
-          this.sessionService.token = response.token;
-          this.sessionService.userProfile = response.user;
-        })
+        tap(
+          response => this.sessionService.setSession(response)
+        )
       );
   }
 
@@ -62,18 +61,19 @@ export class AuthService {
 
   /**
    * Logout
-   * deletes on backend the Token object assigned to the current User object
-   * clears current SessionService
+   * Deletes on backend the Token object assigned to the current User object.
+   * Clears current SessionService.
+   * Then {@link SessionService.token} casts <code>false</code> into {@link SessionService.loginStatus}
    * @see SessionService.clearSession
+   * @see SessionService.token
    */
   get logout$() {
-    return this.httpApi.get(ApiUrls.logout).pipe(
-      tap(res => {
-        console.log(res);
-        this.sessionService.clearSession();
-        // TODO: When hasToken became BehaviorSubject do .next(false);
-      })
-    );
+    return this.httpApi.get(ApiUrls.logout)
+      .pipe(
+        tap(
+          () => this.sessionService.clearSession()
+        )
+      );
   }
 
   /**
@@ -103,10 +103,9 @@ export class AuthService {
     return this.httpApi.post<ApiLoginResponse>(ApiUrls.register, user)
       .pipe(
         catchError(this.handleError),
-        tap(response => {
-          this.sessionService.token = response.token;
-          this.sessionService.userProfile = response.user;
-        })
+        tap(
+          response => this.sessionService.setSession(response)
+        )
       );
   }
 
