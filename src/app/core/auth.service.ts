@@ -28,7 +28,7 @@ export class AuthService {
 
   // TODO: Change to BehaviorSubject
   get hasToken(): boolean {
-    return this.sessionService.token !== undefined;
+    return this.sessionService.isLoggedIn;
   }
 
   /**
@@ -84,7 +84,7 @@ export class AuthService {
    */
   redirectOnSubscribe() {
     return (): void => {
-      if (this.hasToken) {
+      if (this.sessionService.isLoggedIn) {
         const redirect = this.redirectUrl ? this.redirectUrl : '/product';
         this.router.navigate([redirect]);
       }
