@@ -11,12 +11,24 @@
     </form>
   </div>
   <div class="user-block">
-    <div class="user" routerLink="/new-advert" *ngIf="user">
-      <img src="{{user.avatar}}" alt="usr_img" class="user__img">
-      <span class="user__name">{{user.username}}</span>
-    </div>
-    <a routerLink="/login" (click)="logout()" class="logout">
-      <img src="assets/img/fa-sign-out.svg" alt="Logout" class="logout__img">
-    </a>
+    <ng-container *ngIf="authorized$ | async; then authorized else unauthorized"></ng-container>
   </div>
 </header>
+
+<ng-template #authorized>
+  <ng-container *ngIf="user$ | async as user">
+  <div class="user" routerLink="/new-advert">
+    <img src="{{user.avatar}}" alt="usr_img" class="user__img">
+    <span class="user__name">{{user.username}}</span>
+  </div>
+  <a (click)="logout()" class="logout">
+    <img src="assets/img/fa-sign-out.svg" alt="Logout" class="logout__img">
+  </a>
+  </ng-container>
+</ng-template>
+
+<ng-template #unauthorized>
+  <!--TODO: Add styles-->
+  <div class="">Welcome, <a href="" routerLink="/login">login</a> or <a href="" routerLink="/login">register</a> to
+    start!</div>
+</ng-template>

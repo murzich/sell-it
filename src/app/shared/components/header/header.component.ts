@@ -1,35 +1,30 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { AuthService } from '../../../core/auth.service';
 import { UserProfile } from '../../../core/models/user.model';
 import { ProfileService } from '../../../core/profile.service';
+import { SessionService } from '../../../core/session.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnDestroy {
+export class HeaderComponent {
+  user$: Observable<UserProfile>;
+  authorized$: Observable<boolean>;
 
-  user: UserProfile;
-  subscription: Subscription;
-
-  constructor(private profileService: ProfileService, private auth: AuthService, private router: Router) {
-    this.subscription = this.profileService.profile$
-      .subscribe(
-        userProfile => this.user = userProfile
-      );
+  constructor(
+    private profileService: ProfileService,
+    private auth: AuthService,
+    private session: SessionService,
+    ) {
+    this.user$ = this.profileService.profile$;
+    this.authorized$ = this.session.isLoggedIn$;
   }
 
   logout() {
-    this.auth.logout$.subscribe(
-      () => this.router.navigate(['/login'])
-    );
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.auth.logout$.subscribe();
   }
 }
