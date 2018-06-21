@@ -32,9 +32,11 @@ export class AddAdvertComponent {
   get price(): FormControl {return this.advertForm.get('price') as FormControl; }
 
   onSubmit() {
-    this.addAdvertService.postAdvert(new AdvertCreate(this.advertForm.value))
+    this.addAdvertService.postAdvWithImages$(new AdvertCreate(this.advertForm.value), this.images)
       .subscribe(
-        value => console.log(value)
+        value => console.log(value),
+        e => console.log(e),
+        () => console.log('completed')
       );
   }
 

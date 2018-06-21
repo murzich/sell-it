@@ -14,6 +14,7 @@ export class Advert {
   contractPrice?: boolean;
   currency?: number;
   id: number;
+  pk?: number;
   images: AdvertImage[];
   is_active?: boolean;
   location?: LocationApi;
@@ -25,6 +26,7 @@ export class Advert {
       this.images.push(new AdvertImage());
     }
     this.id = json.pk;
+    this.pk = json.pk;
     this.theme = json.theme;
   }
 }
