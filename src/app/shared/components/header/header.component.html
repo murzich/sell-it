@@ -1,5 +1,5 @@
 <header>
-  <a routerLink="/profile" class="logo">
+  <a routerLink="/product" class="logo">
     <img src="assets/img/sell-it.png" alt="Logo: Buy it!" class="logo__img">
   </a>
   <div class="search">
@@ -16,15 +16,17 @@
 </header>
 
 <ng-template #authorized>
-  <ng-container *ngIf="user$ | async as user">
-  <div class="user" routerLink="/new-advert">
+  <div class="user" *ngIf="user$ | async as user">
     <img src="{{user.avatar}}" alt="usr_img" class="user__img">
     <span class="user__name">{{user.username}}</span>
   </div>
   <a (click)="logout()" class="logout">
     <img src="assets/img/fa-sign-out.svg" alt="Logout" class="logout__img">
   </a>
-  </ng-container>
+  <div class="user-block__menu">
+    <a routerLink="/new-advert" class="user-block__link">Add new post</a>
+    <a routerLink="/profile" class="user-block__link">Profile</a>
+  </div>
 </ng-template>
 
 <ng-template #unauthorized>
