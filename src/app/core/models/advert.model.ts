@@ -1,6 +1,12 @@
 import { AdvertImage } from './image.model';
+import { LocationApi } from './location.model';
 import { User } from './user.model';
 
+// TODO: Joint classes
+
+/**
+ * Implements adverts in the advert list view.
+ */
 export class Advert {
   // TODO: Parse string by `new Date("...");`
   activatedAt?: Date;
@@ -10,10 +16,7 @@ export class Advert {
   id: number;
   images: AdvertImage[];
   isActive?: boolean;
-  location?: any;
-  owner?: User;
-  price?: number;
-  text?: string;
+  location?: LocationApi;
   theme: string;
 
   constructor(json: any) {
@@ -26,11 +29,31 @@ export class Advert {
   }
 }
 
+/**
+ * Implements advert in the detail page.
+ */
 export class AdvertFull extends Advert {
+  owner: User;
+  price: number;
+  text: string;
+
   constructor(json: any) {
     super(json);
     this.owner = new User(json.owner);
     this.price = json.price;
     this.text = json.text;
   }
+}
+
+/**
+ * Class of advert for POSTing to the backend.
+ */
+export class AdvertCreate {
+  contract_price?: boolean;
+  currency?: number;
+  isActive?: boolean;
+  location?: LocationApi;
+  price?: number;
+  text?: string;
+  theme: string;
 }

@@ -4,7 +4,7 @@ import { Observable, OperatorFunction } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import ApiUrls from './api-urls';
-import { Advert, AdvertFull } from './models/advert.model';
+import { AdvertFull } from './models/advert.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,11 +38,11 @@ export class AdvertService {
       );
   }
 
-  private adaptResponse(): OperatorFunction<any, Advert[]> {
+  private adaptResponse(): OperatorFunction<any, AdvertFull[]> {
     return map( (response: any) => {
-      const results: Advert[] = [];
+      const results: AdvertFull[] = [];
       this.nextPage = response.next;
-      response.results.forEach(item => results.push(new Advert(item)));
+      response.results.forEach(item => results.push(new AdvertFull(item)));
       return results;
     });
   }

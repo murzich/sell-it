@@ -1,4 +1,5 @@
 import { LoginFormModel, RegistrationFormModel } from '../../login-page/login.model';
+import { LocationApi } from './location.model';
 
 /**
  * This image inserted as avatar image when the User doesn't have one
@@ -76,9 +77,7 @@ export class UserProfile extends User {
     }
     this.color_scheme = json.color_scheme || undefined;
     this.language = json.language;
-    this.location = (typeof json.location === 'string')
-      ? this.location = {name: json.location}
-      : this.location = json.location || undefined;
+    this.location = LocationApi.new(json.location);
   }
 }
 

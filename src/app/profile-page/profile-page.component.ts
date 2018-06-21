@@ -119,7 +119,7 @@ export class ProfilePageComponent implements OnDestroy {
     this.profileForm.get('color_scheme').patchValue(name);
   }
   private set location(location: string | object) {
-    this.profileForm.get('location').patchValue((location) ? location['name'] : null);
+    this.profileForm.get('location').patchValue(location);
   }
 
   /**
@@ -132,7 +132,7 @@ export class ProfilePageComponent implements OnDestroy {
     this.last_name = profile.last_name;
     // this.avatar = profile.avatar;
     this.language = profile.language;
-    this.location = profile.location;
+    this.location = profile.location.toString();
     this.color_scheme = profile.color_scheme;
   }
 

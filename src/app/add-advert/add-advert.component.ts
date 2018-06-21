@@ -19,9 +19,7 @@ export class AddAdvertComponent implements OnInit {
       price: [0, Validators.min(0)],
       currency: 1,
       contract_price: false,
-      location: this.fb.group({
-        name: ''
-      }),
+      location: '',
       is_active: true
     });
   }
