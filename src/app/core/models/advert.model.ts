@@ -52,7 +52,7 @@ export class AdvertCreate {
   contract_price?: boolean;
   currency?: number;
   is_active?: boolean;
-  location?: LocationApi;
+  location?: LocationApi | number;
   price?: number;
   text?: string;
   theme: string;
@@ -60,7 +60,8 @@ export class AdvertCreate {
     this.contract_price = json.contract_price;
     this.currency = json.currency;
     this.is_active = json.is_active;
-    this.location = LocationApi.new(json.location);
+    // TODO: sever takes location only as it's id in number type (or converts from string)
+    this.location = LocationApi.numberForAdvertCreation(json.location);
     this.price = (json.price === null) ? undefined : json.price;
     this.text = json.text;
     this.theme = json.theme;

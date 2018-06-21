@@ -1,10 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
+import { AddAdvertRoutingModule } from './add-advert-routing.module';
 
 import { AddAdvertComponent } from './add-advert.component';
-import { AddAdvertRoutingModule } from './add-advert-routing.module';
-import { SharedModule } from '../shared/shared.module';
+import { AddAdvertService } from './add-advert.service';
 
 @NgModule({
   imports: [
@@ -18,6 +19,9 @@ import { SharedModule } from '../shared/shared.module';
   ],
   exports: [
     AddAdvertRoutingModule,
+  ],
+  providers: [
+    AddAdvertService,
   ]
 })
 export class AddAdvertModule { }

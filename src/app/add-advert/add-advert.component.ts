@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdvertCreate } from '../core/models/advert.model';
 
@@ -9,7 +9,7 @@ import { AddAdvertService } from './add-advert.service';
   templateUrl: './add-advert.component.html',
   styleUrls: ['./add-advert.component.scss']
 })
-export class AddAdvertComponent implements OnInit {
+export class AddAdvertComponent {
 
   advertForm: FormGroup;
 
@@ -28,11 +28,10 @@ export class AddAdvertComponent implements OnInit {
   get theme(): FormControl {return this.advertForm.get('theme') as FormControl; }
   get price(): FormControl {return this.advertForm.get('price') as FormControl; }
 
-  ngOnInit() {
-    // this.advertForm.get('currency').disable();
-  }
-
   onSubmit() {
-    this.addAdvertService.postAdvert(new AdvertCreate(this.advertForm.value));
+    this.addAdvertService.postAdvert(new AdvertCreate(this.advertForm.value))
+      .subscribe(
+        value => console.log(value)
+      );
   }
 }

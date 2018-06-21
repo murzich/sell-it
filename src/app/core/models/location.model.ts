@@ -41,6 +41,11 @@ export class LocationApi {
     return (!json) ? undefined : new LocationApi(json);
   }
 
+  // TODO: remove this temporaty crutch
+  static numberForAdvertCreation(value) {
+    return (Number.isNaN(+value) || +value === 0) ? undefined : +value;
+  }
+
 
   /**
    * Return string value of name property
