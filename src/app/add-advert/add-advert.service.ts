@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { AdvertFull } from '../core/models/advert.model';
+import { AdvertCreate } from '../core/models/advert.model';
 
 @Injectable({
   // TODO: providedIn AddAdvertModule does not work
@@ -10,7 +10,7 @@ export class AddAdvertService {
 
   constructor() { }
 
-  postAdvert(advert: AdvertFull): void {
+  postAdvert(advert: AdvertCreate): void {
     console.log(advert);
   }
 }

@@ -15,7 +15,7 @@ export class Advert {
   currency?: number;
   id: number;
   images: AdvertImage[];
-  isActive?: boolean;
+  is_active?: boolean;
   location?: LocationApi;
   theme: string;
 
@@ -51,9 +51,18 @@ export class AdvertFull extends Advert {
 export class AdvertCreate {
   contract_price?: boolean;
   currency?: number;
-  isActive?: boolean;
+  is_active?: boolean;
   location?: LocationApi;
   price?: number;
   text?: string;
   theme: string;
+  constructor(json: AdvertCreate) {
+    this.contract_price = json.contract_price;
+    this.currency = json.currency;
+    this.is_active = json.is_active;
+    this.location = LocationApi.new(json.location);
+    this.price = (json.price === null) ? undefined : json.price;
+    this.text = json.text;
+    this.theme = json.theme;
+  }
 }
