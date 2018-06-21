@@ -52,6 +52,12 @@
     <label class="form-label form-label--inline" for="add-active">Active</label>
   </div>
 
+  <div class="form-group">
+    <label class="form-label" for="images">Images</label>
+    <input type="file" id="images" multiple (change)="onFileChange($event)"
+           accept="image/jpeg, image/png, image/jpg, image/gif">
+  </div>
+
   <button type="submit" [disabled]="advertForm.invalid">Submit</button>
 
 </form>
