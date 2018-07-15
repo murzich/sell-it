@@ -1,13 +1,10 @@
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
-
+import { HttpRequest } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
 import { AdvertService } from './advert.service';
 import ApiUrls from './api-urls';
-import {AdvertFull} from './models/advert.model';
+import { AdvertFull } from './models/advert.model';
 
 describe('AdvertService', () => {
   let service: AdvertService;
@@ -18,7 +15,7 @@ describe('AdvertService', () => {
       imports: [HttpClientTestingModule],
       providers: [AdvertService]
     });
-    // inject the service
+    // injects the service
     service = TestBed.get(AdvertService);
     httpMock = TestBed.get(HttpTestingController);
   });
@@ -28,6 +25,7 @@ describe('AdvertService', () => {
   });
 
   it('should return the json', () => {
+    const testingUrl = ApiUrls.adverts;
     const mockAdvert = {
           owner: {},
           price: 15,
@@ -37,8 +35,11 @@ describe('AdvertService', () => {
     service.getAdverts().subscribe(data => {
       expect(data[0]).toEqual(mockAdvert as AdvertFull);
     });
-// Use predicate fn for test containing string
-    const req = httpMock.expectOne(`${ApiUrls.adverts}?limit=12&offset=0`, 'call to api');
+
+    const checkUrl = (url) => (request: HttpRequest<any>): boolean => {
+      return url.includes(request.url);
+    };
+    const req = httpMock.expectOne(checkUrl(testingUrl), 'call to api');
     expect(req.request.method).toBe('GET');
 
     req.flush({
