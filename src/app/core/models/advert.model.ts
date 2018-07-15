@@ -21,7 +21,13 @@ export class Advert {
   theme: string;
 
   constructor(json: any) {
-    this.images = json.images.map((image: any) => new AdvertImage(image));
+    try {
+      this.images = json.images.map((image: any) => new AdvertImage(image));
+    } catch (e) {
+      // The error is occurring only on an unit testing.
+      // console.log('Advert images was undefined! Defined they as empty array in model.');
+      this.images = [];
+    }
     if (this.images.length === 0) {
       this.images.push(new AdvertImage());
     }
