@@ -9,10 +9,6 @@ import { AdvertFull } from './models/advert.model';
 
 describe('AdvertService', () => {
 
-  it('should be created', inject([AdvertService], (serviceAnother: AdvertService) => {
-    expect(serviceAnother).toBeTruthy();
-  }));
-
   let service: AdvertService;
   let httpMock: HttpTestingController;
 
@@ -48,6 +44,10 @@ describe('AdvertService', () => {
   it('should have a service instance', () => {
     expect(service).toBeDefined();
   });
+
+  it('should be created', inject([AdvertService], (serviceAnother: AdvertService) => {
+    expect(serviceAnother).toBeTruthy();
+  }));
 
   describe('private .adaptResponse()', () => {
 
@@ -194,6 +194,79 @@ describe('AdvertService', () => {
       );
 
       const req = httpMock.expectOne(`${testingUrl}${testId}`);
+
+      // Create mock ErrorEvent, raised when something goes wrong at the network level.
+      // Connection timeout, DNS error, offline, etc
+      const mockError = new ErrorEvent('Network error', {
+        message: emsg,
+      });
+
+      // Respond with mock error
+      req.error(mockError);
+    });
+  });
+
+  describe('.getNext()', () => {
+    const testOffset = 25;
+    const offsetParam = (testOffset * 12).toString(10);
+
+    it('should return the AdvertFull[]', () => {
+      service.getNext(testOffset).subscribe(data => {
+        expect(data).toEqual(resultData);
+      });
+
+      const req = httpMock.expectOne(checkUrl(testingUrl), 'call to api');
+      expect(req.request.method).toBe('GET');
+      expect(req.request.params.get('offset')).toBe(offsetParam);
+
+      req.flush(mockJson);
+
+      httpMock.verify();
+    });
+
+    it('should return nothing when empty', () => {
+      service.getNext(testOffset).subscribe(data => {
+        expect(data).toEqual([]);
+      });
+
+      const req = httpMock.expectOne(checkUrl(testingUrl), 'call to api');
+      expect(req.request.method).toBe('GET');
+      expect(req.request.params.get('offset')).toBe(offsetParam);
+
+
+      req.flush({});
+
+      httpMock.verify();
+    });
+
+    it('can test for 404 error', () => {
+      const emsg = 'deliberate 404 error';
+
+      service.getNext(testOffset).subscribe(
+        data => fail('should have failed with the 404 error'),
+        (error: HttpErrorResponse) => {
+          expect(error.status).toEqual(404, 'status');
+          expect(error.error).toEqual(emsg, 'message');
+        }
+      );
+
+      const req = httpMock.expectOne(checkUrl(testingUrl));
+
+      // Respond with mock error
+      req.flush(emsg, { status: 404, statusText: 'Not Found' });
+    });
+
+    it('can test for network error', () => {
+      const emsg = 'simulated network error';
+
+      service.getNext(testOffset).subscribe(
+        data => fail('should have failed with the network error'),
+        (error: HttpErrorResponse) => {
+          expect(error.error.message).toEqual(emsg, 'message');
+        }
+      );
+
+      const req = httpMock.expectOne(checkUrl(testingUrl));
 
       // Create mock ErrorEvent, raised when something goes wrong at the network level.
       // Connection timeout, DNS error, offline, etc
