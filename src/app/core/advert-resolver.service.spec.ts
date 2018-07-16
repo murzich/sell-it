@@ -1,6 +1,9 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { ActivatedRouteSnapshot } from '@angular/router';
+import { of } from 'rxjs';
 import { AdvertResolverService } from './advert-resolver.service';
 import { AdvertService } from './advert.service';
+import { AdvertFull } from './models/advert.model';
 
 describe('AdvertResolverService', () => {
   let service: AdvertResolverService;
@@ -26,4 +29,21 @@ describe('AdvertResolverService', () => {
   it('should be created', inject([AdvertResolverService], (serviceAnother: AdvertResolverService) => {
     expect(serviceAnother).toBeTruthy();
   }));
+
+  it('should return observable', () => {
+    const testId = 2;
+    const testObs = of(<AdvertFull>{id: 2});
+    const routeFake = new ActivatedRouteSnapshot();
+    routeFake.params = {id: testId};
+
+    advertServiceSpy.readAdvert.and.returnValue(testObs);
+    expect(service.resolve(routeFake, undefined))
+      .toBe(testObs, 'service return "Observable"');
+    expect(advertServiceSpy.readAdvert.calls.count())
+      .toBe(1, 'called once');
+    expect(advertServiceSpy.readAdvert.calls.mostRecent().returnValue)
+      .toBe(testObs);
+    expect(advertServiceSpy.readAdvert.calls.mostRecent().args[0])
+      .toBe(testId, 'id is equal');
+  });
 });
