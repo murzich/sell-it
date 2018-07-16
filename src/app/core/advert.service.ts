@@ -38,12 +38,17 @@ export class AdvertService {
       );
   }
 
+  /**
+   * Returns the RxJs map operator with the handling function, which converts
+   * a response into the entire app format & saves next pagination link.
+   * @return {OperatorFunction<{results?: any; next?: any}, AdvertFull[]>}
+   */
   private adaptResponse(): OperatorFunction<any, AdvertFull[]> {
-    return map( (response: any) => {
-      const results: AdvertFull[] = [];
-      this.nextPage = response.next;
-      response.results.forEach(item => results.push(new AdvertFull(item)));
-      return results;
+    return map( ({ results = [], next = '' }) => {
+      const adverts: AdvertFull[] = [];
+      this.nextPage = next;
+      results.forEach(item => adverts.push(new AdvertFull(item)));
+      return adverts;
     });
   }
 }
