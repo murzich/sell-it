@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+// import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
 
 import ApiUrls from './api-urls';
@@ -13,7 +13,7 @@ describe('AuthService', () => {
   let service: AuthService;
   let httpMock: HttpTestingController;
   let session: jasmine.SpyObj<SessionService>;
-  let router: Router;
+  let router: jasmine.SpyObj<Router>;
 
   const sessionIsLoggedIn = true;
 
@@ -24,14 +24,20 @@ describe('AuthService', () => {
     );
     sessionSpy.isLoggedIn = sessionIsLoggedIn;
 
+    const routerSpy = jasmine.createSpyObj(
+      'Router',
+      ['navigate']
+    );
+
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule.withRoutes([]),
+        // RouterTestingModule.withRoutes([]),
         HttpClientTestingModule,
       ],
       providers: [
         AuthService,
-        {provide: SessionService, useValue: sessionSpy}
+        {provide: SessionService, useValue: sessionSpy},
+        {provide: Router, useValue: routerSpy},
       ]
     });
 
@@ -40,7 +46,7 @@ describe('AuthService', () => {
     session = TestBed.get(SessionService);
     router = TestBed.get(Router);
 
-    router.initialNavigation();
+    // router.initialNavigation();
   });
 
   describe('Initialization test', () => {
@@ -284,6 +290,30 @@ describe('AuthService', () => {
         message: emsg,
       });
       req.error(mockError);
+    });
+  });
+
+  describe('.redirectOnSubscribe method', () => {
+  /* redirectOnSubscribe() {
+   *   return (): void => {
+   *     if (this.sessionService.isLoggedIn) {
+   *       const redirect = this.redirectUrl || '/product';
+   *       this.router.navigate([redirect]);
+   *     }
+   *   };
+   * }
+   */
+    it('should redirect if loggedIn', () => {
+      const redirectUrl = undefined;
+      session.isLoggedIn = true;
+      service.redirectUrl = redirectUrl;
+      // const url = spyOnProperty(service, 'redirectUrl').and.returnValue(undefined);
+
+      // Called twice because method returns function.
+      service.redirectOnSubscribe()();
+
+      expect(service.redirectUrl).toBe(redirectUrl, 'redirect url shouldn\'t change');
+      expect(router.navigate.calls.count()).toBe(1, 'should call router.redirect');
     });
   });
 });
