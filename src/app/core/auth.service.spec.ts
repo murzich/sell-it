@@ -14,14 +14,11 @@ describe('AuthService', () => {
   let session: jasmine.SpyObj<SessionService>;
   let router: jasmine.SpyObj<Router>;
 
-  const sessionIsLoggedIn = true;
-
   beforeEach(() => {
     const sessionSpy = jasmine.createSpyObj(
       'SessionService',
-      ['setSession', 'clearSession', 'token']
+      ['setSession', 'clearSession', 'token', 'isLoggedIn']
     );
-    sessionSpy.isLoggedIn = sessionIsLoggedIn;
 
     const routerSpy = jasmine.createSpyObj(
       'Router',
@@ -43,6 +40,21 @@ describe('AuthService', () => {
     httpMock = TestBed.get(HttpTestingController);
     session = TestBed.get(SessionService);
     router = TestBed.get(Router);
+
+    // Redefined props for next spyOnProp'ing on them (needed get & set for that)
+    Object.defineProperties(session, {
+      'isLoggedIn': {
+        configurable: true,
+        enumerable: true,
+        get: () => undefined,
+      },
+      'token': {
+        configurable: true,
+        enumerable: true,
+        get: () => undefined,
+        set: () => undefined,
+      }
+    });
   });
 
   describe('Initialization test', () => {
@@ -57,9 +69,11 @@ describe('AuthService', () => {
 
   describe('.hasToken getter', () => {
     it('should return value of sessionService isLoggedIn', () => {
+      const isLoggedInSpy = spyOnProperty(session, 'isLoggedIn').and.returnValue(true);
       const testLogin = service.hasToken;
 
-      expect(testLogin).toBe(sessionIsLoggedIn, 'value incorrect');
+      expect(testLogin).toBe(true, 'value incorrect');
+      expect(isLoggedInSpy).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -291,15 +305,21 @@ describe('AuthService', () => {
 
   describe('.redirectOnSubscribe method', () => {
     let redirectUrl: string;
+    let isLoggedInSpy: jasmine.Spy;
+
+    beforeEach( () => {
+      isLoggedInSpy = spyOnProperty(session, 'isLoggedIn');
+    });
 
     it('should redirect if loggedIn', () => {
       redirectUrl = '';
-      session.isLoggedIn = true;
+      isLoggedInSpy.and.returnValue(true);
       service.redirectUrl = redirectUrl;
 
-      // Called twice because method returns function.
+      // Called twice because the method returns function.
       service.redirectOnSubscribe()();
 
+      expect(isLoggedInSpy).toHaveBeenCalled();
       expect(service.redirectUrl)
         .toBe(redirectUrl, 'redirect url shouldn\'t change');
       expect(router.navigate.calls.count())
@@ -311,16 +331,22 @@ describe('AuthService', () => {
     it('should redirect to custom redirectUrl', () => {
       redirectUrl = '/test';
       service.redirectUrl = redirectUrl;
+      isLoggedInSpy.and.returnValue(true);
 
       service.redirectOnSubscribe()();
 
+      expect(isLoggedInSpy).toHaveBeenCalled();
       expect(router.navigate.calls.mostRecent().args[0])
         .toEqual([redirectUrl]);
     });
 
     it('should not navigate if is not logged in', () => {
-      session.isLoggedIn = false;
+      isLoggedInSpy.and.returnValue(false);
+
+      service.redirectOnSubscribe()();
+
       expect(router.navigate).not.toHaveBeenCalled();
+      expect(isLoggedInSpy).toHaveBeenCalled();
     });
   });
 
@@ -435,6 +461,57 @@ describe('AuthService', () => {
       });
 
       req.error(mockError);
+    });
+  });
+
+  describe('.tokenRefresh()', () => {
+    const url = ApiUrls.tokenRefresh;
+    const existingToken = 'existing-token';
+    const updatedToken = 'updated-token';
+    let tokenGetSpy: jasmine.Spy;
+    let tokenSetSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      tokenGetSpy = spyOnProperty(session, 'token', 'get');
+      tokenSetSpy = spyOnProperty(session, 'token', 'set');
+    });
+
+    it('should send existing token & receive updated', () => {
+      tokenGetSpy.and.returnValue(existingToken);
+
+      service.tokenRefresh().subscribe(
+        (data) => {
+          expect(data).
+          toEqual({ token: updatedToken }, 'responded token isn\'t as expected');
+
+          expect(tokenGetSpy).toHaveBeenCalledTimes(1);
+          expect(tokenSetSpy).toHaveBeenCalledTimes(1);
+        }
+      );
+
+      const req = httpMock.expectOne(url, 'url doesn\'t match');
+      expect(req.request.method)
+        .toBe('POST', 'wrong method call');
+      expect(req.request.body)
+        .toEqual({ token: existingToken});
+
+      req.flush({ token: updatedToken });
+
+      httpMock.verify();
+    });
+
+    it('shouldn\'t do anything when there isn\'t token', () => {
+      tokenGetSpy.and.returnValue(true);
+
+      service.tokenRefresh().subscribe(
+        () => fail(),
+        () => fail(),
+        () => {
+          expect(tokenGetSpy).toHaveBeenCalled();
+        } );
+
+      httpMock.expectOne(url);
+      httpMock.verify();
     });
   });
 });
