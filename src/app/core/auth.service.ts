@@ -71,7 +71,8 @@ export class AuthService {
     return this.httpApi.get(ApiUrls.logout)
       .pipe(
         tap(
-          () => this.sessionService.clearSession()
+          () => this.sessionService.clearSession(),
+          () => this.sessionService.clearSession(),
         )
       );
   }

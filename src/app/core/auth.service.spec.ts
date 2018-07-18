@@ -219,4 +219,71 @@ describe('AuthService', () => {
       req.error(mockError);
     });
   });
+
+  describe('.logout$ method', () => {
+    const url = ApiUrls.logout;
+    const response = {detail: 'Successfully logged out!'};
+
+    it('should send GET request to backend', () => {
+      service.logout$.subscribe((data) => {
+          expect(data).toEqual(data, 'data isn\'t equal');
+        });
+
+      const req = httpMock.expectOne(url);
+      expect(req.request.method).toBe('GET');
+
+      req.flush(response);
+    });
+
+    it('should call SessionService.clearSession()', () => {
+      service.logout$.subscribe((data) => {
+        expect(data).toEqual(data, 'data isn\'t equal');
+
+        expect(session.clearSession.calls.count())
+          .toBe(1, 'must be called at once');
+      });
+
+      httpMock.expectOne(url).flush(response);
+    });
+
+    it('can test for 400 error', () => {
+      const emsg = 'deliberate 400 error';
+
+      service.logout$.subscribe(
+        data => fail('should have failed with the 400 error'),
+        (error: HttpErrorResponse) => {
+          expect(error.status).toEqual(400, 'status');
+          expect(error.error).toEqual(emsg, 'message');
+
+          expect(session.clearSession.calls.count())
+            .toBe(1, 'should logout in the app level anyway');
+        }
+      );
+
+      const req = httpMock.expectOne(url);
+
+      req.flush(emsg, { status: 400, statusText: 'Bad request' });
+    });
+
+    it('can test for network error', () => {
+      const emsg = 'simulated network error';
+
+      service.logout$.subscribe(
+        data => fail('should have failed with the network error'),
+        (error: HttpErrorResponse) => {
+          expect(error.error.message).toEqual(emsg, 'message');
+
+          expect(session.clearSession.calls.count())
+            .toBe(1, 'should logout in the app level anyway');
+        }
+      );
+
+      const req = httpMock.expectOne(url);
+
+      const mockError = new ErrorEvent('Network error', {
+        message: emsg,
+      });
+      req.error(mockError);
+    });
+  });
 });
