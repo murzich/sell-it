@@ -514,4 +514,27 @@ describe('AuthService', () => {
       httpMock.verify();
     });
   });
+
+  describe('.verifyEmail', () => {
+    const url = ApiUrls.verifyEmail;
+    const key = 'key-string';
+    const response = {
+      message: 'test-message',
+    };
+
+    it('should POST key to backend', () => {
+      service.verifyEmail({key}).subscribe(
+        (data) => {
+          expect(data).toEqual(response, 'unexpected response');
+        }
+      );
+
+      const req = httpMock.expectOne(url);
+      expect(req.request.method).toBe('POST', 'wrong method');
+      expect(req.request.body).toEqual({key}, 'request body isn\'t equal');
+
+      req.flush(response);
+      httpMock.verify();
+    });
+  });
 });
