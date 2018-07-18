@@ -2,7 +2,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-// import { RouterTestingModule } from '@angular/router/testing';
 import { throwError } from 'rxjs';
 
 import ApiUrls from './api-urls';
@@ -31,7 +30,6 @@ describe('AuthService', () => {
 
     TestBed.configureTestingModule({
       imports: [
-        // RouterTestingModule.withRoutes([]),
         HttpClientTestingModule,
       ],
       providers: [
@@ -45,8 +43,6 @@ describe('AuthService', () => {
     httpMock = TestBed.get(HttpTestingController);
     session = TestBed.get(SessionService);
     router = TestBed.get(Router);
-
-    // router.initialNavigation();
   });
 
   describe('Initialization test', () => {
@@ -294,26 +290,37 @@ describe('AuthService', () => {
   });
 
   describe('.redirectOnSubscribe method', () => {
-  /* redirectOnSubscribe() {
-   *   return (): void => {
-   *     if (this.sessionService.isLoggedIn) {
-   *       const redirect = this.redirectUrl || '/product';
-   *       this.router.navigate([redirect]);
-   *     }
-   *   };
-   * }
-   */
+    let redirectUrl: string;
+
     it('should redirect if loggedIn', () => {
-      const redirectUrl = undefined;
+      redirectUrl = '';
       session.isLoggedIn = true;
       service.redirectUrl = redirectUrl;
-      // const url = spyOnProperty(service, 'redirectUrl').and.returnValue(undefined);
 
       // Called twice because method returns function.
       service.redirectOnSubscribe()();
 
-      expect(service.redirectUrl).toBe(redirectUrl, 'redirect url shouldn\'t change');
-      expect(router.navigate.calls.count()).toBe(1, 'should call router.redirect');
+      expect(service.redirectUrl)
+        .toBe(redirectUrl, 'redirect url shouldn\'t change');
+      expect(router.navigate.calls.count())
+        .toBe(1, 'should call router.navigate');
+      expect(router.navigate.calls.mostRecent().args[0])
+        .toEqual(['/product']);
+    });
+
+    it('should redirect to custom redirectUrl', () => {
+      redirectUrl = '/test';
+      service.redirectUrl = redirectUrl;
+
+      service.redirectOnSubscribe()();
+
+      expect(router.navigate.calls.mostRecent().args[0])
+        .toEqual([redirectUrl]);
+    });
+
+    it('should not navigate if is not logged in', () => {
+      session.isLoggedIn = false;
+      expect(router.navigate).not.toHaveBeenCalled();
     });
   });
 });
