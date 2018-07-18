@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
@@ -10,7 +11,7 @@ import { SessionService } from './session.service';
 
 describe('AuthService', () => {
   let service: AuthService;
-  let httpApi: HttpTestingController;
+  let httpMock: HttpTestingController;
   let session: jasmine.SpyObj<SessionService>;
   let router: Router;
 
@@ -35,7 +36,7 @@ describe('AuthService', () => {
     });
 
     service = TestBed.get(AuthService);
-    httpApi = TestBed.get(HttpTestingController);
+    httpMock = TestBed.get(HttpTestingController);
     session = TestBed.get(SessionService);
     router = TestBed.get(Router);
 
@@ -88,7 +89,7 @@ describe('AuthService', () => {
         (response) => expect(response).toEqual(expectedResponse)
       );
 
-      const req = httpApi.expectOne(url, 'urls is not as expected');
+      const req = httpMock.expectOne(url, 'urls is not as expected');
       expect(req.request.method).toBe('POST', 'http mehod wasn\'t POST');
       expect(({...req.request.body})).toEqual(preparedData, 'backend gets unexpected data');
 
@@ -108,7 +109,7 @@ describe('AuthService', () => {
         }
       );
 
-      const req = httpApi.expectOne(url, 'urls is not as expected');
+      const req = httpMock.expectOne(url, 'urls is not as expected');
 
       req.flush(expectedResponse);
     });
@@ -132,11 +133,11 @@ describe('AuthService', () => {
         }
       );
 
-      const req = httpApi.expectOne(url, 'urls is not as expected');
+      const req = httpMock.expectOne(url, 'urls is not as expected');
 
       req.flush(emsg, {status: 400, statusText: 'Bad request'});
 
-      httpApi.verify();
+      httpMock.verify();
     });
 
     it('can test for network error', () => {
@@ -156,12 +157,65 @@ describe('AuthService', () => {
         }
       );
 
-      const req = httpApi.expectOne(url);
+      const req = httpMock.expectOne(url);
 
       const mockError = new ErrorEvent('Network error', {
         message: emsg,
       });
 
+      req.error(mockError);
+    });
+  });
+
+  describe('.loginByGoogle method', () => {
+    const url = ApiUrls.googleAuth;
+    const token = 'test-token';
+    const response = 'test-response';
+
+    it('should send token to backend', () => {
+      service.loginByGoogle(token).subscribe(
+        (data) => expect(data).toBe(response)
+      );
+
+      const req = httpMock.expectOne(url, 'url aren\'t match');
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body).toEqual({access_token: token});
+
+      req.flush(response);
+      httpMock.verify();
+    });
+
+    it('can test for 400 error', () => {
+      const emsg = 'deliberate 400 error';
+
+      service.loginByGoogle(token).subscribe(
+        data => fail('should have failed with the 400 error'),
+        (error: HttpErrorResponse) => {
+          expect(error.status).toEqual(400, 'status');
+          expect(error.error).toEqual(emsg, 'message');
+        }
+      );
+
+      const req = httpMock.expectOne(url);
+
+      req.flush(emsg, { status: 400, statusText: 'Bad request' });
+    });
+
+    it('can test for network error', () => {
+      const emsg = 'simulated network error';
+
+      service.loginByGoogle(token).subscribe(
+        data => fail('should have failed with the network error'),
+        (error: HttpErrorResponse) => {
+          expect(error.error.message).toEqual(emsg, 'message');
+        }
+      );
+
+      const req = httpMock.expectOne(url);
+
+      const mockError = new ErrorEvent('Network error', {
+        message: emsg,
+      });
       req.error(mockError);
     });
   });
