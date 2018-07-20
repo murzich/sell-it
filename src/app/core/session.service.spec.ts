@@ -1,6 +1,7 @@
 import { inject, TestBed } from '@angular/core/testing';
 import { CookieService } from 'ngx-cookie';
 import { BehaviorSubject } from 'rxjs';
+import { UserProfile } from './models/user.model';
 import { SessionService } from './session.service';
 import createSpyObj = jasmine.createSpyObj;
 
@@ -9,6 +10,12 @@ describe('Session Service', () => {
   let cookie: jasmine.SpyObj<CookieService>;
   // token with expDate `new Date(2222222222000)`, which is approximately equal 2040 year.
   const validToken = 'test-token.MjIyMjIyMjIyMg==';
+  const user = {
+    id: 1,
+    username: 'UserName',
+    email: 'user@email.com',
+    avatar: null,
+  };
 
   beforeEach(() => {
     const cookieSpy = createSpyObj('CookieService', ['get', 'put', 'remove']);
@@ -159,12 +166,7 @@ describe('Session Service', () => {
 
   describe('.setSession', () => {
     const session = {
-      user: {
-        id: 1,
-        username: 'UserName',
-        email: 'user@email.com',
-        avatar: null,
-      },
+      user: user,
       token: validToken,
     };
 
@@ -224,6 +226,53 @@ describe('Session Service', () => {
       expect(loginStatusSpy).toHaveBeenCalled();
       expect(loginStatusSpy.calls.mostRecent().args[0])
         .toBe(false);
+    });
+  });
+
+  describe('get/set userProfile', () => {
+    let getFromLocStore: jasmine.Spy;
+    let setToLocStore: jasmine.Spy;
+    let removeFromLocStore: jasmine.Spy;
+
+    beforeEach(() => {
+      // Items' names aren't used, because test covers only 'userProfile' key.
+      removeFromLocStore = spyOn(localStorage, 'removeItem');
+      setToLocStore = spyOn(localStorage, 'setItem');
+      getFromLocStore = spyOn(localStorage, 'getItem');
+    });
+
+    it('should return userProfile from localStorage', () => {
+      getFromLocStore.and.returnValue(JSON.stringify(user));
+
+      const userTest = service.userProfile;
+
+      expect(userTest).toEqual(new UserProfile(user));
+      expect(getFromLocStore).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return null if localStorage hasn\'t userProfile', () => {
+      getFromLocStore.and.returnValue(undefined);
+
+      const userTest = service.userProfile;
+
+      expect(userTest).toEqual(null);
+      expect(getFromLocStore).toHaveBeenCalledTimes(1);
+    });
+
+    it('should set new userProfile to localStorage', () => {
+      service.userProfile = user;
+
+      expect(setToLocStore).toHaveBeenCalled();
+      expect(setToLocStore.calls.mostRecent().args)
+        .toEqual(['userProfile', JSON.stringify(user)]);
+    });
+
+    it('should set remove from localStorage get null', () => {
+      service.userProfile = null;
+
+      expect(setToLocStore).not.toHaveBeenCalled();
+      expect(removeFromLocStore).toHaveBeenCalled();
+      expect(removeFromLocStore.calls.mostRecent().args[0]).toBe('userProfile');
     });
   });
 });
