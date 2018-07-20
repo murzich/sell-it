@@ -7,6 +7,8 @@ import createSpyObj = jasmine.createSpyObj;
 describe('Session Service', () => {
   let service: SessionService;
   let cookie: jasmine.SpyObj<CookieService>;
+  // token with expDate `new Date(2222222222000)`, which is approximately equal 2040 year.
+  const validToken = 'test-token.MjIyMjIyMjIyMg==';
 
   beforeEach(() => {
     const cookieSpy = createSpyObj('CookieService', ['get', 'put', 'remove']);
@@ -33,8 +35,7 @@ describe('Session Service', () => {
 
   it('should create BS with true if token is valid', () => {
     const cookieStub = { get: () => {
-        // `new Date(2222222222000)` is approximately equal 2040 year.
-        return `test-token.${btoa('2222222222')}`;
+        return validToken;
       }};
 
     service = new SessionService(cookieStub as CookieService);
@@ -109,6 +110,50 @@ describe('Session Service', () => {
         }
       );
     });
+  });
 
+  describe('.isTokenExpired', () => {
+    let tokenSpy: jasmine.Spy;
+    let tokenExpDate: jasmine.Spy;
+
+    beforeEach(() => {
+      tokenSpy = spyOnProperty(service, 'token');
+      tokenExpDate = spyOn(service, 'tokenExpDate');
+    });
+
+    it('should return false if token is absent', () => {
+      tokenSpy.and.returnValue(undefined);
+
+      const test = service.isTokenExpired();
+
+      expect(test).toBe(false);
+      expect(tokenSpy).toHaveBeenCalled();
+      expect(tokenExpDate).not.toHaveBeenCalled();
+    });
+
+    it('should check for expiration date', () => {
+      tokenSpy.and.returnValue(validToken);
+      tokenExpDate.and.callThrough();
+
+      const test = service.isTokenExpired();
+
+      expect(test).toBe(false);
+      expect(tokenSpy).toHaveBeenCalled();
+      expect(tokenExpDate).toHaveBeenCalled();
+      expect(tokenExpDate.calls.mostRecent().returnValue)
+        .toEqual(new Date(2222222222000));
+    });
+
+    it('should return false if the token became expired', () => {
+      const invalidToken = 'invalid-token';
+      tokenSpy.and.returnValue(invalidToken);
+      tokenExpDate.and.returnValue(new Date(Date.now() - 2000));
+
+      const test = service.isTokenExpired();
+
+      expect(test).toBe(true);
+      expect(tokenSpy).toHaveBeenCalled();
+      expect(tokenExpDate).toHaveBeenCalled();
+    });
   });
 });
