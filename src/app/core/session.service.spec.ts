@@ -74,6 +74,7 @@ describe('Session Service', () => {
   });
 
   describe('.clearSession()', () => {
+
     it('should clear own token & userProfile', () => {
       const tokenSpy = spyOnProperty(service, 'token', 'set');
       const userSpy = spyOnProperty(service, 'userProfile', 'set');
@@ -273,6 +274,15 @@ describe('Session Service', () => {
       expect(setToLocStore).not.toHaveBeenCalled();
       expect(removeFromLocStore).toHaveBeenCalled();
       expect(removeFromLocStore.calls.mostRecent().args[0]).toBe('userProfile');
+    });
+  });
+
+  describe('.tokenExpDate', () => {
+
+    it('should extract expiration date from JWT token', () => {
+      const testDate = service.tokenExpDate(validToken);
+
+      expect(testDate).toEqual(new Date(2222222222000));
     });
   });
 });
