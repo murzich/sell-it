@@ -183,4 +183,47 @@ describe('Session Service', () => {
         .toEqual(session.user);
     });
   });
+
+  describe('get/set token', () => {
+
+    it('should get token from cookie', () => {
+      cookie.get.and.returnValue(validToken);
+
+      const token = service.token;
+
+      expect(cookie.get).toHaveBeenCalled();
+      expect(token).toBe(validToken);
+    });
+
+    it('should set token & update loginStatus', () => {
+      const expDateSpy = spyOn(service, 'tokenExpDate')
+        .and.returnValue(new Date(1));
+      const loginStatusSpy = spyOn(service.loginStatus, 'next');
+      const cookiePutExpectArgs = ['token', validToken, {expires: new Date(1)}];
+
+      service.token = validToken;
+
+      expect(cookie.put).toHaveBeenCalled();
+      expect(expDateSpy).toHaveBeenCalled();
+      expect(cookie.put.calls.mostRecent().args)
+        .toEqual(cookiePutExpectArgs);
+      expect(loginStatusSpy).toHaveBeenCalled();
+      expect(loginStatusSpy.calls.mostRecent().args[0])
+        .toBe(true);
+    });
+
+    it('should remove a token cookie if the token === null', () => {
+      const loginStatusSpy = spyOn(service.loginStatus, 'next');
+      const cookieRemoveExpectArgs = ['token'];
+
+      service.token = null;
+
+      expect(cookie.remove).toHaveBeenCalled();
+      expect(cookie.remove.calls.mostRecent().args)
+        .toEqual(cookieRemoveExpectArgs);
+      expect(loginStatusSpy).toHaveBeenCalled();
+      expect(loginStatusSpy.calls.mostRecent().args[0])
+        .toBe(false);
+    });
+  });
 });
