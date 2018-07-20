@@ -156,4 +156,31 @@ describe('Session Service', () => {
       expect(tokenExpDate).toHaveBeenCalled();
     });
   });
+
+  describe('.setSession', () => {
+    const session = {
+      user: {
+        id: 1,
+        username: 'UserName',
+        email: 'user@email.com',
+        avatar: null,
+      },
+      token: validToken,
+    };
+
+    it('should set this.token & this.userProfile', () => {
+      const tokenSpy = spyOnProperty(service, 'token', 'set');
+      const userSpy = spyOnProperty(service, 'userProfile', 'set');
+
+      const test = service.setSession(session);
+
+      expect(test).toBeUndefined();
+      expect(tokenSpy).toHaveBeenCalled();
+      expect(userSpy).toHaveBeenCalled();
+      expect(tokenSpy.calls.mostRecent().args[0])
+        .toEqual(session.token);
+      expect(userSpy.calls.mostRecent().args[0])
+        .toEqual(session.user);
+    });
+  });
 });
