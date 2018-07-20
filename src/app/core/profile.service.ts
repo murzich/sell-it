@@ -47,19 +47,12 @@ export class ProfileService {
    * @return {Observable<UserProfile>}
    * @see profile
    * @see SessionService.userProfile
+   * @see hasTokenWithoutProfile
+   * @see getFreshProfile$
    */
   get profile$(): Observable<UserProfile> {
-    if (this.sessionService.userProfile === null && this.sessionService.token !== undefined) {
-      return this.http.get<UserProfile>(ApiUrls.profile)
-        .pipe(
-          map(res => {
-            const userProfile = new UserProfile(res);
-            this.profile.next(userProfile);
-            this.sessionService.userProfile = userProfile;
-            return userProfile;
-          }),
-          switchMapTo(this.profile.asObservable())
-        );
+    if (this.hasTokenWithoutProfile()) {
+      return this.getFreshProfile$();
     }
     return this.profile.asObservable();
   }
@@ -111,4 +104,35 @@ export class ProfileService {
   private get sessionProfile(): UserProfile {
     return this.sessionService.userProfile;
   }
+
+  /**
+   * Gets a fresh instance of the User profile from the backend & throws it
+   * to the {@link profile} BehaviourSubject's next value.
+   * Afterward switches to the observable given by the profile's BS.
+   * @return {Observable<UserProfile>}
+   * @see profile$
+   */
+  private getFreshProfile$(): Observable<UserProfile> {
+    return this.http.get<UserProfile>(ApiUrls.profile)
+      .pipe(
+        map(res => {
+          const userProfile = new UserProfile(res);
+          this.profile.next(userProfile);
+          this.sessionService.userProfile = userProfile;
+          return userProfile;
+        }),
+        switchMapTo(this.profile.asObservable())
+      );
+  }
+
+  /**
+   * Condition for checking if the current session contains a user profile data & has a token.
+   * @return {boolean}
+   * @see profile$
+   */
+  private hasTokenWithoutProfile(): boolean {
+    const session = this.sessionService;
+    return session.userProfile === null && session.token !== undefined;
+  }
+
 }
