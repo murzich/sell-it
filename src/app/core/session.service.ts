@@ -150,7 +150,7 @@ export class SessionService {
    */
   private tokenExpDate(token: string): Date {
     return new Date(
-      JSON.parse(atob(token.split('.')[1])).exp * 1000
+      JSON.parse(atob(token.split('.')[1])) * 1000
     );
   }
 }
