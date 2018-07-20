@@ -129,14 +129,17 @@ export class SessionService {
    */
   set userProfile(userData: UserProfile | null) {
     if (userData !== null) {
-      localStorage.userProfile = JSON.stringify(userData);
+      localStorage.setItem('userProfile', JSON.stringify(userData));
     } else {
       localStorage.removeItem('userProfile');
     }
   }
   get userProfile(): UserProfile {
-    if (localStorage.userProfile !== undefined) {
-      return new UserProfile(JSON.parse(localStorage.userProfile));
+    const userString = localStorage.getItem('userProfile');
+    if (userString !== undefined) {
+      return new UserProfile(
+        JSON.parse(userString)
+      );
     } else {
       return null;
     }
