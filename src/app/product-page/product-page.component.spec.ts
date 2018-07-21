@@ -1,6 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { AdvertService } from '../core/advert.service';
 
 import { ProductPageComponent } from './product-page.component';
@@ -38,8 +39,7 @@ export class InfiniteScrollStubDirective {
 describe('ProductPageComponent', () => {
   let component: ProductPageComponent;
   let fixture: ComponentFixture<ProductPageComponent>;
-  // let advertService: jasmine.SpyObj<AdvertService>;
-  let advertService: AdvertService;
+  let advertService: jasmine.SpyObj<AdvertService>;
   const sampleAdvert = {
     id: 2,
     images: [],
@@ -47,12 +47,11 @@ describe('ProductPageComponent', () => {
   };
 
   beforeEach(async(() => {
-    // const advertStubService = jasmine.createSpyObj('AdvertService', ['getAdverts', 'getNext', 'nextPage']);
-    const advertStubService = {
-      getAdverts: () => of([sampleAdvert]),
-      getNext: () => of([sampleAdvert]),
-      nextPage: 'url',
-    };
+    const advertStubService = jasmine.createSpyObj('AdvertService', [
+      'getAdverts',
+      'getNext',
+      'nextPage',
+    ]);
 
     TestBed.configureTestingModule({
       declarations: [
@@ -71,17 +70,38 @@ describe('ProductPageComponent', () => {
   }));
 
   beforeEach(() => {
-    // advertService = TestBed.get(AdvertService);
+    advertService = TestBed.get(AdvertService);
     fixture = TestBed.createComponent(ProductPageComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
 
-    // advertService.getAdverts.and.returnValue(of([sampleAdvert]));
-    // advertService.getNext.and.returnValue(of([sampleAdvert]));
-    // advertService.nextPage.and.returnValue('of([sampleAdvert])');
+    // advertService.getAdverts.and.returnValue(of());
+    advertService.getNext.and.returnValue(of([sampleAdvert]));
+    advertService.nextPage.and.returnValue('of([sampleAdvert])');
+    // fixture.detectChanges();
   });
 
   it('should create', () => {
+    advertService.getAdverts.and.returnValue(of());
+    fixture.detectChanges();
+
     expect(component).toBeTruthy();
+  });
+
+  it('should get adverts from AdvertService', () => {
+    advertService.getAdverts.and.returnValue(of([sampleAdvert]));
+
+    component.ngOnInit();
+
+    expect(component.adverts).toEqual([sampleAdvert]);
+    expect(advertService.getAdverts).toHaveBeenCalledTimes(1);
+  });
+
+  it('should console.log error and keep empty adverts', () => {
+    advertService.getAdverts.and.returnValue(throwError(new HttpErrorResponse({ error: 'test error', status: 404 })));
+
+    component.ngOnInit();
+
+    expect(component.adverts).toEqual(undefined);
+    expect(advertService.getAdverts).toHaveBeenCalledTimes(1);
   });
 });
