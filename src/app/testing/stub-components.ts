@@ -1,4 +1,4 @@
-import { Component, Directive, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({selector: 'app-header', template: ''})
 export class HeaderStubComponent { }
@@ -14,13 +14,4 @@ export class ProductItemStubComponent {
   @Input() id: number;
   @Input() image: string;
   @Input() name: string;
-}
-
-@Directive({
-  selector: '[appInfiniteScroll]',
-})
-export class InfiniteScrollStubDirective {
-  @Input() crossbarDelta: number;
-  @Input() goScroll: boolean;
-  @Output() reachedBottom = new EventEmitter<any>();
 }

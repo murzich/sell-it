@@ -9,9 +9,9 @@ import {
   ButtonToTopStubComponent,
   FooterStubComponent,
   HeaderStubComponent,
-  InfiniteScrollStubDirective,
   ProductItemStubComponent,
 } from '../testing/stub-components';
+import { InfiniteScrollStubDirective } from '../testing/stub-directives';
 import { ProductPageComponent } from './product-page.component';
 
 describe('ProductPageComponent', () => {
