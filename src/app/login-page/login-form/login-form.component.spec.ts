@@ -125,28 +125,30 @@ describe('LoginFormComponent', () => {
       expect(component.alreadyRegistered).toBe(false);
       expect(component.submitButtonText).toBe('Sign Up');
       expect(page.inputs.length).toBe(3);
-      console.log(component.passwordGroup);
     });
   });
 
   describe('#socialSignIn', () => {
 
-    xit('should call socialAuth', () => {
+    it('should call socialAuth', async(() => {
       const userData = {token: 'token-string'};
-      socialAuthService.signIn.and.returnValue(
-        new Promise(() => userData)
+      const socSpy = socialAuthService.signIn.and.returnValue(
+        new Promise((resolve) => { resolve(userData); })
       );
       auth.loginByGoogle.and.returnValue(of('OAuth-response'));
       component.socialSignIn('google');
-      fixture.detectChanges();
 
+      expect(socSpy).toHaveBeenCalled();
       expect(socialAuthService.signIn).toHaveBeenCalled();
+
+      // Tests behaviour after promise from socialAuth.signIn
       fixture.whenStable().then(() => {
-        expect(auth.loginByGoogle).toHaveBeenCalled();
-        expect(auth.loginByGoogle.calls.mostRecent().args[0])
-          .toBe(userData.token);
-      });
-    });
+          fixture.detectChanges();
+          expect(auth.loginByGoogle).toHaveBeenCalled();
+          expect(auth.loginByGoogle.calls.mostRecent().args[0])
+            .toBe(userData.token);
+        });
+    }));
   });
 });
 
