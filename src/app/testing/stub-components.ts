@@ -15,3 +15,7 @@ export class ProductItemStubComponent {
   @Input() image: string;
   @Input() name: string;
 }
+
+@Component({selector: 'app-login-form', template: ''})
+export class LoginFormStubComponent {
+}
