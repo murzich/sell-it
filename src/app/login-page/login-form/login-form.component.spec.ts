@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { AuthService as SocialAuthService } from 'angular5-social-login';
 import { of, throwError } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
@@ -46,9 +47,10 @@ describe('LoginFormComponent', () => {
   }));
 
   beforeEach(() => {
-    auth = TestBed.get(AuthService);
+    // auth = TestBed.get(AuthService);
     socialAuthService = TestBed.get(SocialAuthService);
     fixture = TestBed.createComponent(LoginFormComponent);
+    auth = fixture.debugElement.injector.get(AuthService);
     page = new Page(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -150,31 +152,91 @@ describe('LoginFormComponent', () => {
         });
     }));
   });
+
+  describe('page form', () => {
+    const testFormRegister: RegistrationFormModel = {
+      email: 'user@email.com',
+      passwordGroup: {
+        password: '12345678',
+        passwordConfirm: '12345678',
+      },
+    };
+
+    it('should contain  all elements', () => {
+      expect(page.buttons.length).toBe(4);
+      expect(page.inputs.length).toBe(3);
+
+      page.signInTabBtn.click();
+      fixture.detectChanges();
+
+      expect(page.inputs.length).toBe(2);
+    });
+
+    it('should not submit if form is invalid', () => {
+      expect(component.loginForm.valid).toBeFalsy();
+      page.onSubmit.and.stub();
+
+      page.submitBtn.click();
+      fixture.detectChanges();
+
+      expect(page.onSubmit).not.toHaveBeenCalled();
+    });
+
+    it('should submit inputs', async(() => {
+      auth.register.and.returnValue(of());
+      fixture.detectChanges();
+
+      component.email.patchValue('user@email.com');
+      component.password.patchValue('12345678');
+      component.passwordConfirm.patchValue('12345678');
+
+      fixture.detectChanges();
+
+      expect(page.emailInput.value)
+        .toBe('user@email.com');
+      expect(page.passwordInput.value)
+        .toBe('12345678');
+      expect(page.passwordConfirmInput.value)
+        .toBe('12345678');
+
+      page.formDe.triggerEventHandler('submit', null);
+      // page.submitBtn.click();
+      fixture.detectChanges();
+
+      expect(auth.login).not.toHaveBeenCalled();
+      expect(auth.register).toHaveBeenCalledTimes(1);
+      expect(auth.register.calls.mostRecent().args[0])
+        .toEqual(testFormRegister);
+    }));
+  });
+
+  class Page {
+    get buttons() { return this.queryAll<HTMLButtonElement>('button'); }
+    get signInTabBtn()   { return this.buttons[0]; }
+    get signUpTabBtn()   { return this.buttons[1]; }
+    get submitBtn()      { return this.buttons[2]; }
+    get googleOAuthBtn() { return this.buttons[3]; }
+    get inputs() { return this.queryAll<HTMLInputElement>('input'); }
+    get emailInput()           { return this.inputs[0]; }
+    get passwordInput()        { return this.inputs[1]; }
+    get passwordConfirmInput() { return this.inputs[2]; }
+    get formDe() { return this.queryDe('form'); }
+    get form()   { return this.formDe.nativeElement; }
+
+    onSubmit: jasmine.Spy;
+
+    constructor(fixture: ComponentFixture<LoginFormComponent>) {
+      const component = fixture.componentInstance;
+      this.onSubmit = spyOn(component, 'onSubmit')
+        .and.callThrough();
+    }
+
+    private queryDe(selector: string) {
+      return fixture.debugElement.query(By.css(selector));
+    }
+
+    private queryAll<T>(selector: string): T[] {
+      return fixture.nativeElement.querySelectorAll(selector);
+    }
+  }
 });
-
-class Page {
-  get buttons() { return this.queryAll<HTMLButtonElement>('button'); }
-  get signInTabBtn()   { return this.buttons[0]; }
-  get signUpTabBtn()   { return this.buttons[1]; }
-  get submitBtn()      { return this.buttons[2]; }
-  get googleOAuthBtn() { return this.buttons[3]; }
-  get inputs() { return this.queryAll<HTMLInputElement>('input'); }
-  get emailInput()           { return this.inputs[0]; }
-  get passwordInput()        { return this.inputs[1]; }
-  get passwordConfirmInput() { return this.inputs[2]; }
-
-  onSubmit: jasmine.Spy;
-  switchForm: jasmine.Spy;
-  socialSignIn: jasmine.Spy;
-
-  constructor(private fixture: ComponentFixture<LoginFormComponent>) {
-    const component = fixture.componentInstance;
-    this.onSubmit = spyOn(component, 'onSubmit').and.callThrough();
-    this.switchForm = spyOn(component, 'switchForm').and.callThrough();
-    this.socialSignIn = spyOn(component, 'socialSignIn').and.callThrough();
-  }
-
-  private queryAll<T>(selector: string): T[] {
-    return this.fixture.nativeElement.querySelectorAll(selector);
-  }
-}
