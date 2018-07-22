@@ -1,15 +1,9 @@
-import { Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { FooterStubComponent, HeaderStubComponent, } from '../testing/stub-components';
 
 import { DetailPageComponent } from './detail-page.component';
-
-@Component({selector: 'app-header', template: ''})
-class HeaderStubComponent { }
-
-@Component({selector: 'app-footer', template: ''})
-class FooterStubComponent { }
 
 describe('DetailPageComponent', () => {
   let component: DetailPageComponent;
