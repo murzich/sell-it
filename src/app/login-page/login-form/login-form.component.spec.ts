@@ -172,6 +172,24 @@ describe('LoginFormComponent', () => {
       expect(page.inputs.length).toBe(2);
     });
 
+    it('should change form', () => {
+      page.signInTabBtn.click();
+      fixture.detectChanges();
+
+      expect(page.emailInput).toBeDefined();
+      expect(page.passwordInput).toBeDefined();
+      expect(page.passwordConfirmInput).toBeUndefined();
+      expect(page.submitBtn.innerText).toContain('Login');
+
+      page.signUpTabBtn.click();
+      fixture.detectChanges();
+
+      expect(page.emailInput).toBeDefined();
+      expect(page.passwordInput).toBeDefined();
+      expect(page.passwordConfirmInput).toBeDefined();
+      expect(page.submitBtn.innerText).toContain('Sign Up');
+    });
+
     it('should not submit if form is invalid', () => {
       expect(component.loginForm.valid).toBeFalsy();
       page.onSubmit.and.stub();
@@ -210,6 +228,179 @@ describe('LoginFormComponent', () => {
     }));
   });
 
+  describe('Validation', () => {
+    let formGroup: FormGroup;
+
+    beforeEach(() => {
+      formGroup = component.loginForm;
+    });
+
+    it('should be invalid by default', () => {
+      fixture.detectChanges();
+      expect(formGroup.valid).toBeFalsy();
+    });
+
+    it('should be invalid required inputs', () => {
+      fixture.detectChanges();
+      expect(component.email.valid).toBeFalsy();
+      expect(component.password.valid).toBeFalsy();
+      expect(component.passwordConfirm.valid).toBeFalsy();
+      expect(component.passwordGroup.valid).toBeFalsy();
+      expect(formGroup.valid).toBeFalsy();
+
+      page.signInTabBtn.click();
+      fixture.detectChanges();
+      expect(component.email.valid).toBeFalsy();
+      expect(component.password.valid).toBeFalsy();
+      expect(component.passwordGroup.valid).toBeFalsy();
+      expect(formGroup.valid).toBeFalsy();
+    });
+
+    it('should be valid with right inner data', () => {
+      component.email.patchValue('user@email.com');
+      component.password.patchValue('123456abc');
+      component.passwordConfirm.patchValue('123456abc');
+
+      fixture.detectChanges();
+      expect(component.email.valid).toBeTruthy('email');
+      expect(component.password.valid).toBeTruthy('password');
+      expect(component.passwordConfirm.valid).toBeTruthy('passwordConfirm');
+      expect(component.passwordGroup.valid)
+        .toBeTruthy('equality passwords');
+      expect(formGroup.valid).toBeTruthy();
+
+      page.signInTabBtn.click();
+      fixture.detectChanges();
+      expect(component.email.valid).toBeTruthy('email');
+      expect(component.password.valid).toBeTruthy('password');
+      expect(component.passwordGroup.valid)
+        .toBeTruthy('equality passwords (not used)');
+      expect(component.loginForm.valid).toBeTruthy();
+    });
+
+    it('should be invalid with incorrect email', () => {
+      component.email.patchValue('3@d,');
+      fixture.detectChanges();
+
+      expect(component.email.valid).toBeFalsy();
+    });
+
+    it('should be invalid with short password', () => {
+      component.password.patchValue('1');
+      fixture.detectChanges();
+
+      expect(component.password.valid).toBeFalsy();
+    });
+
+    it('should be invalid with unequal passwordConfirm', () => {
+      component.password.patchValue('123412341234');
+      component.passwordConfirm.patchValue('1');
+
+      fixture.detectChanges();
+
+      expect(component.passwordGroup.valid).toBeFalsy();
+    });
+
+    it('should disabling submit button if invalid', () => {
+      expect(formGroup.valid).toBeFalsy();
+      expect(page.submitBtn.disabled).toBeTruthy();
+    });
+
+    it('should handle click on Google OAuth', () => {
+      const googleAuth = spyOn(component, 'socialSignIn').and.stub();
+
+      page.googleOAuthBtn.click();
+      fixture.detectChanges();
+
+      expect(googleAuth).toHaveBeenCalled();
+    });
+  });
+
+  describe('Validation errors', () => {
+
+    it('should not display when untouched', () => {
+      expect(page.validationErrors.length).toBe(0);
+    });
+
+    it('should display required errors when touched', () => {
+      expect(page.validationErrors.length).toBe(0);
+
+      component.email.markAsTouched();
+      fixture.detectChanges();
+
+      expect(page.validationErrors.length).toBe(1);
+      expect(page.validationErrors[0].innerText)
+        .toContain('Email is required');
+
+      component.password.markAsTouched();
+      fixture.detectChanges();
+
+
+      expect(page.validationErrors.length).toBe(2);
+      expect(page.validationErrors[1].innerText)
+        .toContain('Password is required');
+    });
+
+    it('should display wrong email error', () => {
+      expect(page.validationErrors.length).toBe(0);
+
+      component.email.patchValue('email#not,email');
+      component.email.markAsTouched();
+      fixture.detectChanges();
+
+      expect(page.validationErrors.length).toBe(1);
+      expect(page.validationErrors[0].innerText)
+        .toContain('Email is unacceptable');
+    });
+
+    it('should display short password error', () => {
+      expect(page.validationErrors.length).toBe(0);
+
+      component.password.patchValue('123');
+      component.password.markAsTouched();
+      fixture.detectChanges();
+
+      expect(page.validationErrors.length).toBe(1);
+      expect(page.validationErrors[0].innerText)
+        .toContain('Password is too short');
+    });
+
+    it('should display unequal passwords error', () => {
+      expect(page.validationErrors.length).toBe(0);
+
+      component.password.patchValue('123456abc');
+      component.password.markAsTouched();
+      component.passwordConfirm.patchValue('123');
+      component.passwordConfirm.markAsTouched();
+      fixture.detectChanges();
+
+      expect(page.validationErrors.length).toBe(1);
+      expect(page.validationErrors[0].innerText)
+        .toContain('Passwords are different');
+    });
+
+    it('should display server errors', () => {
+      auth.register.and.returnValue(throwError({
+        email: ['Bad email'],
+        password1: ['Wrong password'],
+        non_field_errors: ['Can\'t find user with this credentials'],
+        username: ['username is already taken'],
+      }));
+      component.onSubmit();
+      fixture.detectChanges();
+
+      expect(page.validationErrors.length).toBe(4);
+      expect(page.validationErrors[0].innerText)
+        .toContain('Bad email');
+      expect(page.validationErrors[1].innerText)
+        .toContain('Wrong password');
+      expect(page.validationErrors[2].innerText)
+        .toContain('Can\'t find user with this credentials');
+      expect(page.validationErrors[3].innerText)
+        .toContain('username is already taken');
+    });
+  });
+
   class Page {
     get buttons() { return this.queryAll<HTMLButtonElement>('button'); }
     get signInTabBtn()   { return this.buttons[0]; }
@@ -222,6 +413,9 @@ describe('LoginFormComponent', () => {
     get passwordConfirmInput() { return this.inputs[2]; }
     get formDe() { return this.queryDe('form'); }
     get form()   { return this.formDe.nativeElement; }
+    get validationErrors() {
+      return this.queryAll<HTMLElement>('.input-error');
+    }
 
     onSubmit: jasmine.Spy;
 
