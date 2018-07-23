@@ -19,7 +19,6 @@ export class DetailPageComponent implements OnInit {
       .subscribe(
         data => this.advert = data.advert,
         err => console.error(err),
-        () => console.log('complete reading advert')
       );
   }
 }

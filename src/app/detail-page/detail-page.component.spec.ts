@@ -12,11 +12,17 @@ describe('DetailPageComponent', () => {
   const ActivatedRouteStub = {
     data: of({
       advert: {
-        owner: {},
+        owner: {
+          first_name: 'Name',
+          last_name: 'Surname',
+          avatar: '/assets/img/default.png',
+        },
         theme: 'test',
         price: 888,
-        images: [],
-        text: '',
+        images: [
+          {file: '/assets/img/default.png'}
+          ],
+        text: 'test-description',
       },
     }),
   };
@@ -44,5 +50,29 @@ describe('DetailPageComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display received data', () => {
+    const sliderImg = fixture.nativeElement
+      .querySelectorAll('.slider__img');
+    const title = fixture.nativeElement
+      .querySelector('.about__title');
+    const vendor = fixture.nativeElement
+      .querySelector('.vendor');
+    const price = fixture.nativeElement
+      .querySelector('.about__price');
+    const description = fixture.nativeElement
+      .querySelector('.about__description');
+    const userImg = fixture.nativeElement
+      .querySelector('.user__img');
+
+    fixture.detectChanges();
+
+    expect(sliderImg[0].src).toContain('/assets/img/default.png');
+    expect(title.innerText).toContain('test');
+    expect(vendor.innerText).toContain('Name Surname');
+    expect(price.innerText).toContain('888');
+    expect(description.innerText).toContain('test-description');
+    expect(userImg.src).toContain('/assets/img/default.png');
   });
 });
