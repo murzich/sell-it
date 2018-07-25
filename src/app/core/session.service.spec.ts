@@ -251,8 +251,18 @@ describe('Session Service', () => {
       expect(getFromLocStore).toHaveBeenCalledTimes(1);
     });
 
-    it('should return null if localStorage hasn\'t userProfile', () => {
+    it('should return null if userProfile in localStorage is undefined', () => {
       getFromLocStore.and.returnValue(undefined);
+
+      const userTest = service.userProfile;
+
+      expect(userTest).toEqual(null);
+      expect(getFromLocStore).toHaveBeenCalledTimes(1);
+    });
+
+    // Added this test case because the localStorage.getItem returns null if an item is absent.
+    it('should return null if localStorage hasn\'t userProfile', () => {
+      getFromLocStore.and.returnValue(null);
 
       const userTest = service.userProfile;
 

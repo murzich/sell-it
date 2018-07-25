@@ -136,7 +136,7 @@ export class SessionService {
   }
   get userProfile(): UserProfile {
     const userString = localStorage.getItem('userProfile');
-    if (userString !== undefined) {
+    if (userString) {
       return new UserProfile(
         JSON.parse(userString)
       );
