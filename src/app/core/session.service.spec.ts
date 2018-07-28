@@ -237,9 +237,9 @@ describe('Session Service', () => {
 
     beforeEach(() => {
       // Items' names aren't used, because test covers only 'userProfile' key.
-      removeFromLocStore = spyOn(localStorage, 'removeItem');
-      setToLocStore = spyOn(localStorage, 'setItem');
-      getFromLocStore = spyOn(localStorage, 'getItem');
+      removeFromLocStore = spyOn(Storage.prototype, 'removeItem');
+      setToLocStore = spyOn(Storage.prototype, 'setItem');
+      getFromLocStore = spyOn(Storage.prototype, 'getItem');
     });
 
     it('should return userProfile from localStorage', () => {
