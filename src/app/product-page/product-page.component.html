@@ -1,8 +1,9 @@
 <app-header></app-header>
-<main appInfiniteScroll
+<main appInfiniteObsScroll
       (reachedBottom)="getMoreAdverts()"
+      [auditionTime]="500"
       [crossbarDelta]="150"
-      [goScroll]="isReadyToScroll"
+      [doEmitEvent]="isReadyToScroll"
 >
     <app-product-item *ngFor="let i of adverts"
                       [id]="i.id"

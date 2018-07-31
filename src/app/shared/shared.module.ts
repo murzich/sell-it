@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ButtonToTopComponent } from './components/button-to-top/button-to-top.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
+import { InfiniteObsScrollDirective } from './directives/infinite-obs-scroll.directive';
 import { InfiniteScrollDirective } from './directives/infinite-scroll/infinite-scroll.directive';
 import { ScrollToTopDirective } from './directives/scroll-to-top/scroll-to-top.directive';
 
@@ -13,6 +14,7 @@ import { ScrollToTopDirective } from './directives/scroll-to-top/scroll-to-top.d
     ButtonToTopComponent,
     FooterComponent,
     HeaderComponent,
+    InfiniteObsScrollDirective,
     InfiniteScrollDirective,
     ScrollToTopDirective,
   ],
@@ -24,6 +26,7 @@ import { ScrollToTopDirective } from './directives/scroll-to-top/scroll-to-top.d
     ButtonToTopComponent,
     FooterComponent,
     HeaderComponent,
+    InfiniteObsScrollDirective,
     InfiniteScrollDirective,
     ScrollToTopDirective
   ],
